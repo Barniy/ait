@@ -3,6 +3,7 @@
     <v-card>
       <v-toolbar>
         <v-text-field
+          solo-inverted
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
@@ -21,12 +22,12 @@
         :search="search"
         loading-text="Loading... Please wait"
         :loading="loading"
+       no-data-text="No Record found"
         class="elevation-1"
       >
-        <template slot="items" slot-scope="props">
-          <td>{{ getNestedObject(props.item, ['someArray', index, 'someProp']) }}xcxc</td>
+        <template v-slot:item.roles="{item}">
+          <v-chip class="ma-2" label v-for="role of item.roles" :key="role.id">{{role.name}}</v-chip>
         </template>
-
         <template v-slot:item.action="{ item }">
           <v-icon small class="mr-2" @click="onEditUser(item)">mdi-circle-edit-outline</v-icon>
           <v-icon small @click="onDeleteUser(item)">mdi-delete-circle</v-icon>
@@ -124,7 +125,7 @@ export default {
         { text: "Middle Name", value: "middleName" },
         { text: "Last Name", value: "lastName" },
         { text: "Email", value: "email" },
-        { text: "Role", value: "role" },
+        { text: "Role", value: "roles" },
         { text: "Actions", value: "action", sortable: false }
       ],
       tableData: [],
@@ -244,5 +245,10 @@ export default {
   }
 };
 </script>
+
 <style scoped>
+.v-btn {
+  text-transform: none !important;
+}
 </style>
+

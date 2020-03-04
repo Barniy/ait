@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class UserResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -14,19 +15,14 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $defaultInfo = [
+        return [
             'id' => $this->id,
+            'fullName' => $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name,
             'firstName' => $this->first_name,
             'middleName' => $this->middle_name,
             'lastName' => $this->last_name,
-            'email' => $this->email
+            'email' => $this->email,
+            'roles' =>  RoleResource::collection($this->roles),
         ];
-
-        $additionalData = [
-            'role' => $this->roles,
-            'permission' => $this->permissions
-        ];
-
-        return array_merge($defaultInfo,$additionalData);
     }
 }

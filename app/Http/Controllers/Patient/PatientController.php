@@ -1,12 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Patient;
 
+
+
+use Illuminate\Http\Request;
 use App\Address;
 use App\Patient;
-use App\EmergencyContact;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\PatientResource;
+use App\EmergencyContact;
+use App\Models\Department;
+use App\Models\PatientDepartment;
+use Symfony\Component\HttpFoundation\Response;
 
 class PatientController extends Controller
 {
@@ -14,9 +20,10 @@ class PatientController extends Controller
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return PatientResource::collection(Patient::all());
+        $perPage = $request->perPage;
+        return PatientResource::collection(Patient::paginate($perPage));
     }
 
     /**
@@ -25,13 +32,41 @@ class PatientController extends Controller
      */
     public function create()
     {
-        return view('patients::create');
+        return view('create');
     }
 
     /**
      * Store a newly created resource in storage.
      * @param Request $request
      * @return Response
+     */
+    /**
+     * @SWG\Get(
+     *     path="/create",
+     *     description="Return a user's first and last name",
+     *     @SWG\Parameter(
+     *         name="firstname",
+     *         in="query",
+     *         type="string",
+     *         description="Your first name",
+     *         required=true,
+     *     ),
+     *     @SWG\Parameter(
+     *         name="lastname",
+     *         in="query",
+     *         type="string",
+     *         description="Your last name",
+     *         required=true,
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="OK",
+     *     ),
+     *     @SWG\Response(
+     *         response=422,
+     *         description="Missing Data"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -78,8 +113,9 @@ class PatientController extends Controller
         $emergencyContact->address()->save($emergencyContactAddress);
 
         return response()->json([
-            'data' => 'patient created successfully'
-        ]);
+            'data' => new PatientResource($patient),
+            'message' => 'patient created successfully'
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -87,10 +123,10 @@ class PatientController extends Controller
      * @param int $id
      * @return Response
      */
-    public function show($id)
+    public function show(Patient $patient)
     {
-        $patient = Patient::find($id);
-        return view('patients::single_patient', compact('patient'));
+
+        return new PatientResource($patient);
     }
 
     /**
@@ -100,45 +136,6 @@ class PatientController extends Controller
      */
     public function edit($id)
     {
-        $patient =  Patient::find($id);
-        $patientAddress = $patient->address;
-        $patientEmergencyContact =   $patient->emergencyContact;
-        $emergencyContactAddress = $patientEmergencyContact->address;
-
-
-
-        if ($patient->address == null) {
-            $patientAddress = [
-                "id" => "",
-                "addressable_id" => "",
-                "addressable_type" => "",
-                "region" => "dfdfd",
-                "woreda" => "",
-                "kebele" => "",
-                "house_number" => "",
-                "tel_phone_number" => "",
-                "mobile_phone_number" => "",
-                "created_at" => "",
-                "updated_at" => ""
-            ];
-        }
-        if ($patientEmergencyContact->address == null) {
-            $emergencyContactAddress = [
-                "id" => "",
-                "addressable_id" => "",
-                "addressable_type" => "",
-                "region" => "",
-                "woreda" => "",
-                "kebele" => "",
-                "house_number" => "",
-                "tel_phone_number" => "",
-                "mobile_phone_number" => "",
-                "created_at" => "",
-                "updated_at" => ""
-            ];
-        }
-
-        return view('patients::edit', compact('patient', 'patientAddress', 'patientEmergencyContact', 'emergencyContactAddress'));
     }
 
     /**
@@ -223,10 +220,9 @@ class PatientController extends Controller
             $patient->emergencyContact->address()->save($emergencyContactAddress);
         }
 
-
-
         return response()->json([
-            'data' => 'patient created successfully'
+            'data' => new PatientResource($patient),
+            'message' => 'patient updated successfully'
         ]);
     }
 
@@ -237,6 +233,54 @@ class PatientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Patient::deletePatient($id);
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+    public function addPatientToDepartment(Request $request)
+    {
+        $patient = Patient::find($request->patientId);
+        $patient->departments()->syncWithOutDetaching([$request->departmentId => [
+            'user_id' => $request->userId
+        ]]);
+        return response()->json([
+            'data' => $patient->departments,
+            'message' => 'patient added successfully',
+            'success' => true
+        ]);
+    }
+
+    public function addLabRequest(Request $request)
+    {
+        $patient = Patient::findOrFail($request->patientId);
+
+        $patient->labRequests()->create([
+            'user_id' => $request->userId,
+            'description' =>  $request->description,
+        ]);
+
+        return response()->json([
+            'data' => $patient->labRequests,
+            'message' => 'lab request added successfully',
+            'success' => true
+        ]);
+    }
+
+    public function addImagingRequest(Request $request)
+    {
+        $patient = Patient::findOrFail($request->patientId);
+
+        $patient->imagingRequests()->create([
+            'user_id' => $request->userId,
+            'description' =>  $request->description,
+        ]);
+
+        return response()->json([
+            'data' => $patient->imagingRequests,
+            'message' => 'Imaging request added successfully',
+            'success' => true
+        ]);
     }
 }

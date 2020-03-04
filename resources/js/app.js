@@ -19,7 +19,7 @@ Vue.use(VueRouter);
 import 'vuetify/dist/vuetify.min.css';
 import Auth from './auth';
 
-Vue.prototype.$auth = new Auth (window.user);
+Vue.prototype.$auth = new Auth(window.user);
 Vue.component('admin', require('./components/admin.vue').default);
 
 
@@ -28,8 +28,8 @@ import Settings from './views/settings/Settings';
 import Users from './views/users/Users';
 import Role from './views/users/Roles';
 import Permissions from './views/users/Permissions';
-
-
+import Patients from './views/patients/patients';
+import PatientDetail from './views/patients/PatientDetail';
 const routes = [{
         path: "/admin/",
         component: Dashboard
@@ -49,6 +49,15 @@ const routes = [{
     {
         path: '/admin/settings',
         component: Settings
+    },
+    {
+        path: '/admin/patients',
+        component: Patients
+    },
+    {
+        path: '/admin/patient/:id',
+        component: PatientDetail,
+        props: true
     }
 ];
 
@@ -62,6 +71,6 @@ const router = new VueRouter({
 
 const app = new Vue({
     el: '#app',
-     router,
+    router,
     vuetify: new Vuetify(vuetifyOptions)
 });
