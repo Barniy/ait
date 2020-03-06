@@ -16,8 +16,8 @@ class CreateAttributeExaminationItemsTable extends Migration
         Schema::create('attribute_examination_items', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->unique();
-            $table->string('code');
-            $table->string('status');
+            $table->string('code')->nullable();
+            $table->string('status')->nullable();
             $table->unsignedBigInteger('attribute_examination_id');
             $table->foreign('attribute_examination_id')->references('id')->on('attribute_examinations')->onDelete('cascade');
             $table->timestamps();

@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Permission as SpatiePermission;
 
 class Permission extends SpatiePermission
 {
-    use Uuid;
+
     protected $primaryKey = 'id';
     public $incrementing = false;
 

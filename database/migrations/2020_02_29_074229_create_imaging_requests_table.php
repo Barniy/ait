@@ -16,11 +16,11 @@ class CreateImagingRequestsTable extends Migration
         Schema::create('imaging_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('patient_id');
-            $table->uuid('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('description');
-            $table->string('status');
+            $table->string('description')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

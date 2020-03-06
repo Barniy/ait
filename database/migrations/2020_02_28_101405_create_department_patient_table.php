@@ -16,7 +16,7 @@ class CreateDepartmentPatientTable extends Migration
         Schema::create('department_patient', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('patient_id');
-            $table->uuid('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->uuid('department_id');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');

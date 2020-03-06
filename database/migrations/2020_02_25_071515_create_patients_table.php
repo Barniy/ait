@@ -17,13 +17,13 @@ class CreatePatientsTable extends Migration
             $table->uuid('id');
             $table->primary('id');
             $table->string('medical_record_number');
-            $table->string('first_name');
-            $table->string('middle_name');
-            $table->string('last_name');
-            $table->enum('gender', ['Female', 'Male']);
-            $table->date('date_of_birth');
-            $table->string('language');
-            $table->string('religion');
+            $table->string('first_name')->nullable();
+            $table->string('middle_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->enum('gender', ['Female', 'Male'])->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->string('language')->nullable();
+            $table->string('religion')->nullable();
             $table->timestamps();
         });
     }

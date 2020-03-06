@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar>
-      <v-btn-toggle>
+      <v-btn-toggle v-model="toggle_exclusive">
         <v-btn @click="onTabClicked(true, false,false,false)">Information</v-btn>
         <v-btn @click="onTabClicked(false,true,false,false)">Vital</v-btn>
         <v-btn @click="onTabClicked(false,false,true,false)">Examinations</v-btn>
@@ -31,6 +31,7 @@ export default {
   props: ["id"],
   data() {
     return {
+     toggle_exclusive: 0,
       onPatientInformation: true,
       onPatientExamination: false,
       onPatientPayment: false,

@@ -17,10 +17,10 @@ class CreateEmergencyContactsTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('patient_id');
             $table->foreign('patient_id')->references('id')->on('patients');
-            $table->string('first_name');
-            $table->string('middle_name');
-            $table->string('last_name');
-            $table->enum('gender', ['Female', 'Male']);
+            $table->string('first_name')->nullable();
+            $table->string('middle_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->enum('gender', ['Female', 'Male'])->nullable();
             $table->timestamps();
         });
     }

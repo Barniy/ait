@@ -3,6 +3,7 @@
 namespace App;
 
 
+use App\Models\LabRequest;
 use App\Http\Traits\UsesUuid;
 use App\Models\Patient\Vital;
 use Spatie\Permission\Traits\HasRoles;
@@ -13,7 +14,6 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
-    use UsesUuid;
 
     protected $guarded = [];
     protected $primaryKey = 'id';
@@ -48,5 +48,10 @@ class User extends Authenticatable
     public function vitals()
     {
         return $this->hasMany(Vital::class);
+    }
+
+    public function labRequests()
+    {
+        return $this->hasMany(LabRequest::class);
     }
 }

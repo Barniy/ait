@@ -87,7 +87,7 @@ export default {
       height: "",
       weight: "",
       patientId: "",
-      userId: "06b73762-19f5-4f7a-b8b5-0b685fbd283a"
+      userId: "2"
     },
     defaultItem: {
       bloodPressure: "",

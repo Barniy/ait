@@ -76,40 +76,40 @@ class PatientController extends Controller
         $emergencyContactAddress = new Address;
 
         // patient basic information
-        $patient->medical_record_number = $request->patient_medical_record_number;
-        $patient->first_name = $request->patient_first_name;
-        $patient->middle_name = $request->patient_middle_name;
-        $patient->last_name = $request->patient_last_name;
-        $patient->gender = $request->patient_gender;
-        $patient->date_of_birth = $request->patient_dob;
-        $patient->language = $request->patient_language !== null ? $request->patient_language : 'Default';
-        $patient->religion = $request->patient_religion;
+        $patient->medical_record_number = $request->input('medicalRecordNumber');
+        $patient->first_name = $request->input('firstName');
+        $patient->middle_name = $request->input('middleName');
+        $patient->last_name = $request->input('lastName');
+        $patient->gender = $request->input('gender');
+        $patient->date_of_birth = $request->input('dateOfBirth');
+        $patient->language = $request->input('language.name');
+        $patient->religion = $request->input('religion');
         $patient->save();
 
         // patient address
-        $patientAddress->region = $request->patient_region;
-        $patientAddress->woreda = $request->patient_woreda;
-        $patientAddress->kebele = $request->patient_kebele;
-        $patientAddress->house_number = $request->patient_house_number;
-        $patientAddress->tel_phone_number = $request->patient_Tel;
-        $patientAddress->mobile_phone_number = $request->patient_Mobile;
+        $patientAddress->region = $request->input('address.region');
+        $patientAddress->woreda = $request->input('address.woreda');
+        $patientAddress->kebele = $request->input('address.kebele');
+        $patientAddress->house_number = $request->input('address.houseNumber');
+        $patientAddress->tel_phone_number = $request->input('address.telPhoneNumber');
+        $patientAddress->mobile_phone_number = $request->input('address.mobilePhoneNumber');
         $patient->address()->save($patientAddress);
 
 
         // emergency contact basic information
         $emergencyContact->patient_id = $patient->id;
-        $emergencyContact->first_name = $request->emergency_first_name;
-        $emergencyContact->middle_name = $request->emergency_middle_name;
-        $emergencyContact->last_name = $request->emergency_last_name;
+        $emergencyContact->first_name = $request->input('emergencyContact.firstName');
+        $emergencyContact->middle_name = $request->input('emergencyContact.middleName');
+        $emergencyContact->last_name = $request->input('emergencyContact.lastName');
         $emergencyContact->save();
 
         // emergency contact address
-        $emergencyContactAddress->region = $request->emergency_contact_region;
-        $emergencyContactAddress->woreda = $request->emergency_contact_woreda;
-        $emergencyContactAddress->kebele = $request->emergency_contact_kebele;
-        $emergencyContactAddress->house_number = $request->emergency_contact_house_number;
-        $emergencyContactAddress->tel_phone_number = $request->emergency_contact_tel;
-        $emergencyContactAddress->mobile_phone_number = $request->emergency_contact_mobile;
+        $emergencyContactAddress->region = $request->input('emergencyContact.address.region');
+        $emergencyContactAddress->woreda = $request->input('emergencyContact.address.woreda');
+        $emergencyContactAddress->kebele = $request->input('emergencyContact.address.kebele');
+        $emergencyContactAddress->house_number = $request->input('emergencyContact.address.houseNumber');
+        $emergencyContactAddress->tel_phone_number = $request->input('emergencyContact.address.telPhoneNumber');
+        $emergencyContactAddress->mobile_phone_number = $request->input('emergencyContact.address.mobilePhoneNumber');
         $emergencyContact->address()->save($emergencyContactAddress);
 
         return response()->json([
@@ -147,36 +147,36 @@ class PatientController extends Controller
     public function update(Request $request, Patient $patient)
     {
 
+
         // patient basic information
         $patient->update([
-            'medical_record_number' => $request->patient_medical_record_number,
-            'first_name' => $request->patient_first_name,
-            'middle_name' => $request->patient_middle_name,
-            'last_name' => $request->patient_last_name,
-            'gender' => $request->patient_gender,
-            'date_of_birth' => $request->patient_dob,
-            'language' => $request->patient_language !== null ? $request->patient_language : 'Default',
-            'religion' => $request->patient_religion
+            'medical_record_number' => $request->input('medicalRecordNumber'),
+            'first_name' => $request->input('firstName'),
+            'middle_name' => $request->input('middleName'),
+            'last_name' => $request->input('lastName'),
+            'gender' => $request->input('gender'),
+            'date_of_birth' => $request->input('dateOfBirth'),
+            'language' => $request->input('language.name'),
+            'religion' => $request->input('religion'),
         ]);
         // patient address
         if (isset($patient->address)) {
             $patient->address->update([
-                'addressable_id' => $patient->id,
-                'region' => $request->patient_region,
-                'woreda' => $request->patient_woreda,
-                'kebele' => $request->patient_kebele,
-                'house_number' => $request->patient_house_number,
-                'tel_phone_number' => $request->patient_Tel,
-                'mobile_phone_number' => $request->patient_Mobile,
+                'region' => $request->input('address.region'),
+                'woreda' => $request->input('address.woreda'),
+                'kebele' => $request->input('address.kebele'),
+                'house_number' => $request->input('address.houseNumber'),
+                'tel_phone_number' => $request->input('address.telPhoneNumber'),
+                'mobile_phone_number' => $request->input('address.mobilePhoneNumber'),
             ]);
         } else {
             $patientAddress = new Address;
-            $patientAddress->region = $request->patient_region;
-            $patientAddress->woreda = $request->patient_woreda;
-            $patientAddress->kebele = $request->patient_kebele;
-            $patientAddress->house_number = $request->patient_house_number;
-            $patientAddress->tel_phone_number = $request->patient_Tel;
-            $patientAddress->mobile_phone_number = $request->patient_Mobile;
+            $patientAddress->region = $request->input('address.region');
+            $patientAddress->woreda = $request->input('address.woreda');
+            $patientAddress->kebele = $request->input('address.kebele');
+            $patientAddress->house_number = $request->input('address.houseNumber');
+            $patientAddress->tel_phone_number = $request->input('address.telPhoneNumber');
+            $patientAddress->mobile_phone_number = $request->input('address.mobilePhoneNumber');
             $patient->address()->save($patientAddress);
         }
 
@@ -185,39 +185,39 @@ class PatientController extends Controller
         if (isset($patient->emergencyContact)) {
             $patient->emergencyContact->update([
                 'patient_id' => $patient->id,
-                'first_name' => $request->emergency_first_name,
-                'middle_name' => $request->emergency_middle_name,
-                'last_name' => $request->emergency_last_name,
+                'first_name' => $request->input('emergencyContact.firstName'),
+                'middle_name' => $request->input('emergencyContact.middleName'),
+                'last_name' => $request->input('emergencyContact.lastName'),
             ]);
         } else {
             $emergencyContact = new EmergencyContact;
             $emergencyContact->patient_id = $patient->id;
-            $emergencyContact->first_name = $request->emergency_first_name;
-            $emergencyContact->middle_name = $request->emergency_middle_name;
-            $emergencyContact->last_name = $request->emergency_last_name;
+            $emergencyContact->first_name = $request->input('emergencyContact.firstName');
+            $emergencyContact->middle_name = $request->input('emergencyContact.middleName');
+            $emergencyContact->last_name = $request->input('emergencyContact.lastName');
             $patientAddress->emergencyContact()->save($emergencyContact);
         }
 
         // emergency contact address
         if (isset($patient->emergencyContact->address)) {
+
             $patient->emergencyContact->address->update([
-                'region' =>  $request->emergency_contact_region,
-                'woreda' =>  $request->emergency_contact_woreda,
-                'kebele' => $request->emergency_contact_kebele,
-                'house_number' =>  $request->emergency_contact_house_number,
-                'tel_phone_number' =>  $request->emergency_contact_tel,
-                'mobile_phone_number' =>  $request->emergency_contact_mobile,
+                'region' => $request->input('emergencyContact.address.region'),
+                'woreda' => $request->input('emergencyContact.address.woreda'),
+                'kebele' => $request->input('emergencyContact.address.kebele'),
+                'house_number' => $request->input('emergencyContact.address.houseNumber'),
+                'tel_phone_number' =>  $request->input('emergencyContact.address.telPhoneNumber'),
+                'mobile_phone_number' =>   $request->input('emergencyContact.address.mobilePhoneNumber'),
             ]);
         } else {
 
             $emergencyContactAddress = new Address;
-            $emergencyContactAddress->region = $request->emergency_contact_region;
-            $emergencyContactAddress->woreda = $request->emergency_contact_woreda;
-            $emergencyContactAddress->kebele = $request->emergency_contact_kebele;
-            $emergencyContactAddress->house_number = $request->emergency_contact_house_number;
-            $emergencyContactAddress->tel_phone_number = $request->emergency_contact_tel;
-            $emergencyContactAddress->mobile_phone_number = $request->emergency_contact_mobile;
-            $patient->emergencyContact->address()->save($emergencyContactAddress);
+            $emergencyContactAddress->region = $request->input('emergencyContact.address.region');
+            $emergencyContactAddress->woreda = $request->input('emergencyContact.address.woreda');
+            $emergencyContactAddress->kebele = $request->input('emergencyContact.address.kebele');
+            $emergencyContactAddress->house_number = $request->input('emergencyContact.address.houseNumber');
+            $emergencyContactAddress->tel_phone_number = $request->input('emergencyContact.address.telPhoneNumber');
+            $emergencyContactAddress->mobile_phone_number = $request->input('emergencyContact.address.mobilePhoneNumber');
         }
 
         return response()->json([

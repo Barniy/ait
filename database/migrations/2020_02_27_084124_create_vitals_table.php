@@ -16,16 +16,16 @@ class CreateVitalsTable extends Migration
         Schema::create('vitals', function (Blueprint $table) {
             $table->uuid('id');
             $table->uuid('patient_id');
-            $table->uuid('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('blood_pressure');
-            $table->string('per_rectum');
-            $table->string('respiratory_rate');
-            $table->string('temperature');
-            $table->string('oxygen_saturation');
-            $table->string('weight');
-            $table->string('height');
+            $table->string('blood_pressure')->nullable();
+            $table->string('per_rectum')->nullable();
+            $table->string('respiratory_rate')->nullable();
+            $table->string('temperature')->nullable();
+            $table->string('oxygen_saturation')->nullable();
+            $table->string('weight')->nullable();
+            $table->string('height')->nullable();
             $table->timestamps();
         });
     }

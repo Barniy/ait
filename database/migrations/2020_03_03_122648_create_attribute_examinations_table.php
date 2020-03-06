@@ -16,8 +16,8 @@ class CreateAttributeExaminationsTable extends Migration
         Schema::create('attribute_examinations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->unique();
-            $table->string('code');
-            $table->string('status');
+            $table->string('code')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

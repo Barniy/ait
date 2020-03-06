@@ -17,12 +17,12 @@ class CreateAddressesTable extends Migration
             $table->uuid('id');
             $table->uuid('addressable_id');
             $table->string('addressable_type');
-            $table->string('region');
-            $table->string('woreda');
-            $table->string('kebele');
-            $table->string('house_number');
-            $table->string('tel_phone_number');
-            $table->string('mobile_phone_number');
+            $table->string('region')->nullable();
+            $table->string('woreda')->nullable();
+            $table->string('kebele')->nullable();
+            $table->string('house_number')->nullable();
+            $table->string('tel_phone_number')->nullable();
+            $table->string('mobile_phone_number')->nullable();
             $table->timestamps();
         });
     }

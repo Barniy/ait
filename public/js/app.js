@@ -2329,6 +2329,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ["id"],
   data: function data() {
     return {
+      toggle_exclusive: 0,
       onPatientInformation: true,
       onPatientExamination: false,
       onPatientPayment: false,
@@ -2342,6 +2343,141 @@ __webpack_require__.r(__webpack_exports__);
       this.onPatientExamination = onExaminationTab;
       this.onPatientPayment = onPaymentTab;
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/patients/components/ImagingRequest.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/patients/components/ImagingRequest.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "ImagingRequest",
+  data: function data() {
+    return {
+      imagingTests: [],
+      clinicalInformation: "",
+      patientConditions: [{
+        id: "1",
+        title: "Any Known Allergies?",
+        value: "allergies"
+      }, {
+        id: "2",
+        title: "Hyberthyroidism?",
+        value: "hyberthyroidism"
+      }, {
+        id: "3",
+        title: "Intramedullary Nail?",
+        value: "intramedullary_nail"
+      }, {
+        id: "4",
+        title: "Cardiac Pacemaker?",
+        value: "cardiac_pacemaker"
+      }, {
+        id: "5",
+        title: "Carebral Aneurysm Clip?",
+        value: "carebral_aneurysm_clip"
+      }, {
+        id: "6",
+        title: "Joint Replacement?",
+        value: "joint_replacement"
+      }],
+      priority: "0",
+      note: "",
+      imagingRequestDialog: false
+    };
+  },
+  methods: {
+    getLookupLabTestAttributes: function getLookupLabTestAttributes() {
+      var _this = this;
+
+      axios.get("/api/attributeExamination/", {
+        params: {
+          type: "IMAGINGTEST"
+        }
+      }).then(function (result) {
+        _this.imagingTests = result.data.data;
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    }
+  },
+  computed: {},
+  created: function created() {
+    this.getLookupLabTestAttributes();
   }
 });
 
@@ -2482,6 +2618,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LabRequest_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LabRequest.vue */ "./resources/js/views/patients/components/LabRequest.vue");
+/* harmony import */ var _ImagingRequest_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ImagingRequest.vue */ "./resources/js/views/patients/components/ImagingRequest.vue");
 //
 //
 //
@@ -2525,10 +2662,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PatientExamination",
   components: {
-    LabRequest: _LabRequest_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    LabRequest: _LabRequest_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    ImagingRequest: _ImagingRequest_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -2796,20 +2935,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PatientInformation",
   props: ["id"],
   data: function data() {
     return {
       languages: [],
+      genders: ["Female", "Male"],
+      date: new Date().toISOString().substr(0, 10),
+      interpreterRequired: false,
       datePickerModal: false,
       patient: {
-        id: "",
         medicalRecordNumber: "",
-        fullName: "",
         firstName: "",
         middleName: "",
         lastName: "",
@@ -2858,6 +2995,17 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/languages").then(function (result) {
         return _this.languages = result.data.data;
       })["catch"](function (err) {});
+    },
+    onSavePatient: function onSavePatient() {
+      if (!this.interpreterRequired) {
+        this.patient.language = this.languages.filter(function (item) {
+          return item.name == "Amharic";
+        });
+      }
+
+      axios.put("/api/patients/" + this.patient.id, this.patient).then(function (response) {
+        return console.log(response);
+      })["catch"](function (error) {});
     }
   },
   created: function created() {
@@ -2993,7 +3141,7 @@ __webpack_require__.r(__webpack_exports__);
         height: "",
         weight: "",
         patientId: "",
-        userId: "06b73762-19f5-4f7a-b8b5-0b685fbd283a"
+        userId: "2"
       },
       defaultItem: {
         bloodPressure: "",
@@ -3135,12 +3283,225 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Patients",
   data: function data() {
     return {
+      dialog: false,
+      datePickerModal: "",
+      interpreterRequired: false,
+      date: new Date().toISOString().substr(0, 10),
+      languages: [],
+      genders: ["Female", "Male"],
+      e1: 1,
       search: "",
       loading: true,
+      patient: {
+        medicalRecordNumber: "",
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        gender: "",
+        dateOfBirth: "",
+        language: "",
+        religion: "",
+        address: {
+          region: "",
+          woreda: "",
+          kebele: "",
+          houseNumber: "",
+          telPhoneNumber: "",
+          mobilePhoneNumber: ""
+        },
+        emergencyContact: {
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          address: {
+            region: "",
+            woreda: "",
+            kebele: "",
+            houseNumber: "",
+            telPhoneNumber: "",
+            mobilePhoneNumber: ""
+          }
+        }
+      },
       pagination: {
         totalItems: null,
         itemsPerPage: null,
@@ -3149,7 +3510,7 @@ __webpack_require__.r(__webpack_exports__);
       headers: [{
         text: "Id",
         sortable: false,
-        align: ' d-none',
+        align: " d-none",
         value: "id"
       }, {
         text: "MCN",
@@ -3177,8 +3538,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    getLanguagess: function getLanguagess() {
+      var _this = this;
+
+      axios.get("/api/languages").then(function (result) {
+        return _this.languages = result.data.data;
+      })["catch"](function (err) {});
+    },
     patientDetail: function patientDetail(event) {
-      this.$router.push('/admin/patient/' + event.id);
+      this.$router.push("/admin/patient/" + event.id);
     },
     initialized: function initialized() {
       this.getPatients();
@@ -3190,19 +3558,31 @@ __webpack_require__.r(__webpack_exports__);
       return this.pagination.rowsPerPageItems;
     },
     getPatients: function getPatients(page) {
-      var _this = this;
+      var _this2 = this;
 
       axios.get("/api/patients?page=" + this.pagination.page).then(function (result) {
-        _this.tableData = result.data.data;
-        _this.pagination.page = result.data.meta.current_page;
-        _this.pagination.itemsPerPage = result.data.meta.per_page;
-        _this.pagination.totalItems = result.data.meta.total;
-        _this.loading = false;
+        _this2.tableData = result.data.data;
+        _this2.pagination.page = result.data.meta.current_page;
+        _this2.pagination.itemsPerPage = result.data.meta.per_page;
+        _this2.pagination.totalItems = result.data.meta.total;
+        _this2.loading = false;
       })["catch"](function (err) {});
     },
-    onNewPatinet: function onNewPatinet() {},
-    onEditPatient: function onEditPatient() {},
-    onDeletePatient: function onDeletePatient() {}
+    onNewPatinet: function onNewPatinet() {
+      this.dialog = true;
+      this.editedItem = Object.assign({}, this.defaultItem);
+    },
+    onSaveNewPatient: function onSaveNewPatient() {
+      if (!this.interpreterRequired) {
+        this.patient.language = this.languages.filter(function (item) {
+          return item.name == "Amharic";
+        });
+      }
+
+      axios.post("/api/patients", this.patient).then(function (response) {
+        return console.log(response);
+      })["catch"](function (error) {});
+    }
   },
   watch: {
     pagination: {
@@ -3214,6 +3594,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.initialized();
+    this.getLanguagess();
   }
 });
 
@@ -40409,6 +40790,15 @@ var render = function() {
         [
           _c(
             "v-btn-toggle",
+            {
+              model: {
+                value: _vm.toggle_exclusive,
+                callback: function($$v) {
+                  _vm.toggle_exclusive = $$v
+                },
+                expression: "toggle_exclusive"
+              }
+            },
             [
               _c(
                 "v-btn",
@@ -40475,6 +40865,261 @@ var render = function() {
       _vm.onPatientExamination ? _c("PatientExamination") : _vm._e(),
       _vm._v(" "),
       _vm.onPatientPayment ? _c("PatientPayment") : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/patients/components/ImagingRequest.vue?vue&type=template&id=441b294e&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/patients/components/ImagingRequest.vue?vue&type=template&id=441b294e& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-container",
+    [
+      _c(
+        "v-row",
+        { attrs: { justify: "center" } },
+        [
+          _c(
+            "v-dialog",
+            {
+              attrs: { persistent: "", "max-width": "1500px" },
+              scopedSlots: _vm._u([
+                {
+                  key: "activator",
+                  fn: function(ref) {
+                    var on = ref.on
+                    return [
+                      _c(
+                        "v-btn",
+                        _vm._g(
+                          {
+                            attrs: {
+                              absolute: "",
+                              dark: "",
+                              fab: "",
+                              top: "",
+                              right: "",
+                              color: "primary"
+                            }
+                          },
+                          on
+                        ),
+                        [_c("v-icon", [_vm._v("mdi-plus")])],
+                        1
+                      )
+                    ]
+                  }
+                }
+              ]),
+              model: {
+                value: _vm.imagingRequestDialog,
+                callback: function($$v) {
+                  _vm.imagingRequestDialog = $$v
+                },
+                expression: "imagingRequestDialog"
+              }
+            },
+            [
+              _vm._v(" "),
+              _c(
+                "v-card",
+                [
+                  _c(
+                    "v-toolbar",
+                    [_c("v-toolbar-title", [_vm._v("Imaging Request")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(
+                        "v-form",
+                        [
+                          _c(
+                            "v-container",
+                            [
+                              _c(
+                                "v-row",
+                                [
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "5" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Provisional Diagnosis"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-row",
+                                        [
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", sm: "6" } },
+                                            [
+                                              _c("header", [
+                                                _vm._v("Patient Condition")
+                                              ]),
+                                              _vm._v(" "),
+                                              _vm._l(
+                                                _vm.patientConditions,
+                                                function(condition) {
+                                                  return _c("v-switch", {
+                                                    key: condition.id,
+                                                    attrs: {
+                                                      inset: "",
+                                                      label: condition.title,
+                                                      value: condition.id
+                                                    }
+                                                  })
+                                                }
+                                              )
+                                            ],
+                                            2
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-col",
+                                            { attrs: { cols: "12", sm: "6" } },
+                                            [
+                                              _c("header", [
+                                                _vm._v("Examination Requested")
+                                              ]),
+                                              _vm._v(" "),
+                                              _vm._l(_vm.imagingTests, function(
+                                                imaging
+                                              ) {
+                                                return _c("v-switch", {
+                                                  key: imaging.key,
+                                                  attrs: {
+                                                    inset: "",
+                                                    label: imaging.description,
+                                                    value: imaging.description
+                                                  }
+                                                })
+                                              })
+                                            ],
+                                            2
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    {
+                                      attrs: {
+                                        cols: "12",
+                                        sm: "6",
+                                        justify: ""
+                                      }
+                                    },
+                                    [
+                                      _c("v-textarea", {
+                                        staticClass: "mx-2",
+                                        attrs: {
+                                          label: "Clinical Information",
+                                          rows: "1"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("v-textarea", {
+                                        attrs: {
+                                          outlined: "",
+                                          name: "input-7-4",
+                                          rows: "16",
+                                          label: "Procedure"
+                                        },
+                                        model: {
+                                          value: _vm.clinicalInformation,
+                                          callback: function($$v) {
+                                            _vm.clinicalInformation = $$v
+                                          },
+                                          expression: "clinicalInformation"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.imagingRequestDialog = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancel")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.labRequestDialog = false
+                            }
+                          }
+                        },
+                        [_vm._v("Save")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -40708,7 +41353,11 @@ var render = function() {
                     "v-btn",
                     {
                       attrs: { color: "blue darken-1", text: "" },
-                      on: { click: _vm.save }
+                      on: {
+                        click: function($event) {
+                          _vm.labRequestDialog = false
+                        }
+                      }
                     },
                     [_vm._v("Save")]
                   )
@@ -40889,7 +41538,15 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _c("v-card-text", [_c("LabRequest")], 1)
+          _c(
+            "v-card-text",
+            [
+              _vm.tab == "0" ? _c("LabRequest") : _vm._e(),
+              _vm._v(" "),
+              _vm.tab == "1" ? _c("ImagingRequest") : _vm._e()
+            ],
+            1
+          )
         ],
         1
       )
@@ -40924,343 +41581,103 @@ var render = function() {
     { attrs: { fluid: "" } },
     [
       _c(
-        "v-row",
-        { attrs: { justify: "space-around" } },
+        "v-card",
         [
           _c(
-            "v-col",
-            { attrs: { cols: "3" } },
+            "v-tabs",
+            { attrs: { vertical: "" } },
             [
+              _c("v-tab", [_vm._v("Basic Information")]),
+              _vm._v(" "),
+              _c("v-tab", [_vm._v("Emergency Contact")]),
+              _vm._v(" "),
               _c(
-                "v-card",
-                {
-                  staticClass: "mx-auto",
-                  attrs: { "max-width": "300", tile: "" }
-                },
+                "v-tab-item",
                 [
                   _c(
-                    "v-list",
-                    { attrs: { disabled: "" } },
-                    [
-                      _c("v-subheader", [_vm._v("Profile")]),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item-group",
-                        {
-                          attrs: { color: "primary" },
-                          model: {
-                            value: _vm.item,
-                            callback: function($$v) {
-                              _vm.item = $$v
-                            },
-                            expression: "item"
-                          }
-                        },
-                        _vm._l(_vm.items, function(item, i) {
-                          return _c(
-                            "v-list-item",
-                            { key: i },
-                            [
-                              _c(
-                                "v-list-item-content",
-                                [
-                                  _c("v-list-item-title", {
-                                    domProps: { textContent: _vm._s(item.text) }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        }),
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-col",
-            { attrs: { cols: "9" } },
-            [
-              _c(
-                "v-card",
-                [
-                  _c("v-card-title", [_vm._v("Personal Information")]),
-                  _vm._v(" "),
-                  _c(
-                    "v-list",
-                    { attrs: { "two-line": "" } },
-                    [
-                      [
-                        _c(
-                          "v-list-item",
-                          [
-                            _c(
-                              "v-avatar",
-                              {
-                                staticClass: "avatar",
-                                attrs: { color: "indigo" }
-                              },
-                              [
-                                _c("v-icon", { attrs: { dark: "" } }, [
-                                  _vm._v("mdi-account-circle")
-                                ])
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-list-item-content",
-                              [
-                                _c("v-list-item-title", [
-                                  _vm._v(_vm._s(_vm.patient.fullName))
-                                ]),
-                                _vm._v(" "),
-                                _c("v-list-item-subtitle", [
-                                  _vm._v(
-                                    _vm._s(_vm.patient.medicalRecordNumber)
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _vm.patient.address
-                                  ? _c("v-list-item-subtitle", [
-                                      _vm._v(
-                                        _vm._s(_vm.patient.address.phoneNumber)
-                                      )
-                                    ])
-                                  : _vm._e()
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ]
-                    ],
-                    2
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c("v-card-title", [_vm._v("Basic Information")]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-text",
+                    "v-card",
+                    { attrs: { flat: "" } },
                     [
                       _c(
-                        "v-container",
+                        "v-card-text",
                         [
                           _c(
-                            "v-row",
+                            "v-container",
                             [
                               _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "first name*",
-                                      required: ""
-                                    },
-                                    model: {
-                                      value: _vm.patient.firstName,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.patient, "firstName", $$v)
-                                      },
-                                      expression: "patient.firstName"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "middle name*",
-                                      required: ""
-                                    },
-                                    model: {
-                                      value: _vm.patient.middleName,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.patient, "middleName", $$v)
-                                      },
-                                      expression: "patient.middleName"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "last name*",
-                                      required: ""
-                                    },
-                                    model: {
-                                      value: _vm.patient.lastName,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.patient, "lastName", $$v)
-                                      },
-                                      expression: "patient.lastName"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-row",
-                            [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
+                                "v-row",
                                 [
                                   _c(
-                                    "v-dialog",
-                                    {
-                                      ref: "dialog",
-                                      attrs: {
-                                        "return-value": _vm.patient.dateOfBirth,
-                                        persistent: "",
-                                        width: "290px"
-                                      },
-                                      on: {
-                                        "update:returnValue": function($event) {
-                                          return _vm.$set(
-                                            _vm.patient,
-                                            "dateOfBirth",
-                                            $event
-                                          )
-                                        },
-                                        "update:return-value": function(
-                                          $event
-                                        ) {
-                                          return _vm.$set(
-                                            _vm.patient,
-                                            "dateOfBirth",
-                                            $event
-                                          )
-                                        }
-                                      },
-                                      scopedSlots: _vm._u([
-                                        {
-                                          key: "activator",
-                                          fn: function(ref) {
-                                            var on = ref.on
-                                            return [
-                                              _c(
-                                                "v-text-field",
-                                                _vm._g(
-                                                  {
-                                                    attrs: {
-                                                      label: "Date of birth",
-                                                      readonly: ""
-                                                    },
-                                                    model: {
-                                                      value:
-                                                        _vm.patient.dateOfBirth,
-                                                      callback: function($$v) {
-                                                        _vm.$set(
-                                                          _vm.patient,
-                                                          "dateOfBirth",
-                                                          $$v
-                                                        )
-                                                      },
-                                                      expression:
-                                                        "patient.dateOfBirth"
-                                                    }
-                                                  },
-                                                  on
-                                                )
-                                              )
-                                            ]
-                                          }
-                                        }
-                                      ]),
-                                      model: {
-                                        value: _vm.datePickerModal,
-                                        callback: function($$v) {
-                                          _vm.datePickerModal = $$v
-                                        },
-                                        expression: "datePickerModal"
-                                      }
-                                    },
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
                                     [
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-date-picker",
-                                        {
-                                          attrs: { scrollable: "" },
-                                          model: {
-                                            value: _vm.patient.dateOfBirth,
-                                            callback: function($$v) {
-                                              _vm.$set(
-                                                _vm.patient,
-                                                "dateOfBirth",
-                                                $$v
-                                              )
-                                            },
-                                            expression: "patient.dateOfBirth"
-                                          }
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "first name*",
+                                          required: ""
                                         },
-                                        [
-                                          _c("v-spacer"),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-btn",
-                                            {
-                                              attrs: {
-                                                text: "",
-                                                color: "primary"
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  _vm.datePickerModal = false
-                                                }
-                                              }
-                                            },
-                                            [_vm._v("Cancel")]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-btn",
-                                            {
-                                              attrs: {
-                                                text: "",
-                                                color: "primary"
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.$refs.dialog.save(
-                                                    _vm.date
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [_vm._v("OK")]
-                                          )
-                                        ],
-                                        1
-                                      )
+                                        model: {
+                                          value: _vm.patient.firstName,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient,
+                                              "firstName",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "patient.firstName"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "middle name*",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.patient.middleName,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient,
+                                              "middleName",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "patient.middleName"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "last name*",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.patient.lastName,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient,
+                                              "lastName",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "patient.lastName"
+                                        }
+                                      })
                                     ],
                                     1
                                   )
@@ -41269,43 +41686,436 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
+                                "v-row",
                                 [
-                                  _c("v-text-field", {
-                                    attrs: { label: "Religion*", required: "" },
-                                    model: {
-                                      value: _vm.patient.religion,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.patient, "religion", $$v)
-                                      },
-                                      expression: "patient.religion"
-                                    }
-                                  })
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Medical Record Number*",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.patient.medicalRecordNumber,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient,
+                                              "medicalRecordNumber",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "patient.medicalRecordNumber"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-select", {
+                                        attrs: {
+                                          items: _vm.genders,
+                                          label: "Gender"
+                                        },
+                                        model: {
+                                          value: _vm.patient.gender,
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.patient, "gender", $$v)
+                                          },
+                                          expression: "patient.gender"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c(
+                                        "v-dialog",
+                                        {
+                                          ref: "dialog",
+                                          attrs: {
+                                            "return-value":
+                                              _vm.patient.dateOfBirth,
+                                            persistent: "",
+                                            width: "290px"
+                                          },
+                                          on: {
+                                            "update:returnValue": function(
+                                              $event
+                                            ) {
+                                              return _vm.$set(
+                                                _vm.patient,
+                                                "dateOfBirth",
+                                                $event
+                                              )
+                                            },
+                                            "update:return-value": function(
+                                              $event
+                                            ) {
+                                              return _vm.$set(
+                                                _vm.patient,
+                                                "dateOfBirth",
+                                                $event
+                                              )
+                                            }
+                                          },
+                                          scopedSlots: _vm._u([
+                                            {
+                                              key: "activator",
+                                              fn: function(ref) {
+                                                var on = ref.on
+                                                return [
+                                                  _c(
+                                                    "v-text-field",
+                                                    _vm._g(
+                                                      {
+                                                        attrs: {
+                                                          label:
+                                                            "Date of birth",
+                                                          readonly: ""
+                                                        },
+                                                        model: {
+                                                          value:
+                                                            _vm.patient
+                                                              .dateOfBirth,
+                                                          callback: function(
+                                                            $$v
+                                                          ) {
+                                                            _vm.$set(
+                                                              _vm.patient,
+                                                              "dateOfBirth",
+                                                              $$v
+                                                            )
+                                                          },
+                                                          expression:
+                                                            "patient.dateOfBirth"
+                                                        }
+                                                      },
+                                                      on
+                                                    )
+                                                  )
+                                                ]
+                                              }
+                                            }
+                                          ]),
+                                          model: {
+                                            value: _vm.datePickerModal,
+                                            callback: function($$v) {
+                                              _vm.datePickerModal = $$v
+                                            },
+                                            expression: "datePickerModal"
+                                          }
+                                        },
+                                        [
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-date-picker",
+                                            {
+                                              attrs: { scrollable: "" },
+                                              model: {
+                                                value: _vm.patient.dateOfBirth,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.patient,
+                                                    "dateOfBirth",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "patient.dateOfBirth"
+                                              }
+                                            },
+                                            [
+                                              _c("v-spacer"),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  attrs: {
+                                                    text: "",
+                                                    color: "primary"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      _vm.datePickerModal = false
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("Cancel")]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "v-btn",
+                                                {
+                                                  attrs: {
+                                                    text: "",
+                                                    color: "primary"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.$refs.dialog.save(
+                                                        _vm.date
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [_vm._v("OK")]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Religion*",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.patient.religion,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient,
+                                              "religion",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "patient.religion"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "5", md: "4" } },
+                                    [
+                                      _c("v-checkbox", {
+                                        attrs: { label: "Interpreter" },
+                                        model: {
+                                          value: _vm.interpreterRequired,
+                                          callback: function($$v) {
+                                            _vm.interpreterRequired = $$v
+                                          },
+                                          expression: "interpreterRequired"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-select", {
+                                        attrs: {
+                                          disabled: !_vm.interpreterRequired,
+                                          items: _vm.languages,
+                                          label: "Language",
+                                          "item-text": "name",
+                                          "return-object": "",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.patient.language,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient,
+                                              "language",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "patient.language"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                                 ],
                                 1
                               ),
                               _vm._v(" "),
                               _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
+                                "v-row",
                                 [
-                                  _c("v-select", {
-                                    attrs: {
-                                      items: _vm.languages,
-                                      label: "Language",
-                                      "item-text": "name",
-                                      "return-object": "",
-                                      required: ""
-                                    },
-                                    model: {
-                                      value: _vm.patient.language,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.patient, "language", $$v)
-                                      },
-                                      expression: "patient.language"
-                                    }
-                                  })
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Region",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.patient.address.region,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient.address,
+                                              "region",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "patient.address.region"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Woreda",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.patient.address.woreda,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient.address,
+                                              "woreda",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "patient.address.woreda"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Kebele",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value: _vm.patient.address.kebele,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient.address,
+                                              "kebele",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "patient.address.kebele"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "House Number",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.patient.address.houseNumber,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient.address,
+                                              "houseNumber",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "patient.address.houseNumber"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "tel Phone  Number",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.patient.address.telPhoneNumber,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient.address,
+                                              "telPhoneNumber",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "patient.address.telPhoneNumber"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-col",
+                                    { attrs: { cols: "12", sm: "6", md: "4" } },
+                                    [
+                                      _c("v-text-field", {
+                                        attrs: {
+                                          label: "Mobile Phone Number",
+                                          required: ""
+                                        },
+                                        model: {
+                                          value:
+                                            _vm.patient.address
+                                              .mobilePhoneNumber,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.patient.address,
+                                              "mobilePhoneNumber",
+                                              $$v
+                                            )
+                                          },
+                                          expression:
+                                            "patient.address.mobilePhoneNumber"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
                                 ],
                                 1
                               )
@@ -41317,161 +42127,20 @@ var render = function() {
                       )
                     ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c("v-card-title", [_vm._v("Address")]),
-                  _vm._v(" "),
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-tab-item",
+                [
                   _c(
-                    "v-card-text",
+                    "v-card",
+                    { attrs: { flat: "" } },
                     [
                       _c(
-                        "v-container",
-                        [
-                          _c(
-                            "v-row",
-                            [
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: { label: "Region", required: "" },
-                                    model: {
-                                      value: _vm.patient.address.region,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.patient.address,
-                                          "region",
-                                          $$v
-                                        )
-                                      },
-                                      expression: "patient.address.region"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: { label: "Woreda", required: "" },
-                                    model: {
-                                      value: _vm.patient.address.woreda,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.patient.address,
-                                          "woreda",
-                                          $$v
-                                        )
-                                      },
-                                      expression: "patient.address.woreda"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "House Number",
-                                      required: ""
-                                    },
-                                    model: {
-                                      value: _vm.patient.address.houseNumber,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.patient.address,
-                                          "houseNumber",
-                                          $$v
-                                        )
-                                      },
-                                      expression: "patient.address.houseNumber"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "tel Phone  Number",
-                                      required: ""
-                                    },
-                                    model: {
-                                      value: _vm.patient.address.telPhoneNumber,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.patient.address,
-                                          "telPhoneNumber",
-                                          $$v
-                                        )
-                                      },
-                                      expression:
-                                        "patient.address.telPhoneNumber"
-                                    }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "v-col",
-                                { attrs: { cols: "12", sm: "6", md: "4" } },
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Mobile Phone Number",
-                                      required: ""
-                                    },
-                                    model: {
-                                      value:
-                                        _vm.patient.address.mobilePhoneNumber,
-                                      callback: function($$v) {
-                                        _vm.$set(
-                                          _vm.patient.address,
-                                          "mobilePhoneNumber",
-                                          $$v
-                                        )
-                                      },
-                                      expression:
-                                        "patient.address.mobilePhoneNumber"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c("v-card-title", [_vm._v("Emergency Contact")]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-text",
-                    [
-                      _c(
-                        "v-container",
+                        "v-card-text",
                         [
                           _c(
                             "v-row",
@@ -41558,24 +42227,8 @@ var render = function() {
                               )
                             ],
                             1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("v-divider"),
-                  _vm._v(" "),
-                  _c("v-card-title", [_vm._v("Emergency Contact Address")]),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-text",
-                    [
-                      _c(
-                        "v-container",
-                        [
+                          ),
+                          _vm._v(" "),
                           _c(
                             "v-row",
                             [
@@ -41634,6 +42287,31 @@ var render = function() {
                                 { attrs: { cols: "12", sm: "6", md: "4" } },
                                 [
                                   _c("v-text-field", {
+                                    attrs: { label: "Kebele", required: "" },
+                                    model: {
+                                      value:
+                                        _vm.patient.emergencyContact.address
+                                          .kebele,
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.patient.emergencyContact.address,
+                                          "kebele",
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "patient.emergencyContact.address.kebele"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", sm: "6", md: "4" } },
+                                [
+                                  _c("v-text-field", {
                                     attrs: {
                                       label: "House Number",
                                       required: ""
@@ -41663,7 +42341,7 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      label: "tel Phone  Number",
+                                      label: "Tele Phone  Number",
                                       required: ""
                                     },
                                     model: {
@@ -41721,6 +42399,26 @@ var render = function() {
                     ],
                     1
                   )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card-actions",
+            [
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-btn",
+                { attrs: { large: "" }, on: { click: _vm.onSavePatient } },
+                [
+                  _c("v-icon", { attrs: { dark: "", left: "" } }, [
+                    _vm._v("mdi-plus")
+                  ]),
+                  _vm._v("Save\n      ")
                 ],
                 1
               )
@@ -42191,7 +42889,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "v-container",
+    { attrs: { fluid: "" } },
     [
       _c(
         "v-card",
@@ -42270,7 +42969,7 @@ var render = function() {
                       "v-icon",
                       {
                         staticClass: "mr-2",
-                        attrs: { small: "" },
+                        attrs: { medium: "" },
                         on: {
                           click: function($event) {
                             $event.stopPropagation()
@@ -42278,27 +42977,805 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("mdi-circle-edit-outline")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "v-icon",
-                      {
-                        attrs: { small: "" },
-                        on: {
-                          click: function($event) {
-                            $event.stopPropagation()
-                            return _vm.onDeletePatient(item)
-                          }
-                        }
-                      },
-                      [_vm._v("mdi-delete-circle")]
+                      [_vm._v("mdi-calendar")]
                     )
                   ]
                 }
               }
             ])
           })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { persistent: "", "max-width": "850px" },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
+        },
+        [
+          _c(
+            "v-stepper",
+            {
+              model: {
+                value: _vm.e1,
+                callback: function($$v) {
+                  _vm.e1 = $$v
+                },
+                expression: "e1"
+              }
+            },
+            [
+              _c(
+                "v-stepper-header",
+                [
+                  _c(
+                    "v-stepper-step",
+                    { attrs: { complete: _vm.e1 > 1, step: "1" } },
+                    [_vm._v("Patient Basic Information")]
+                  ),
+                  _vm._v(" "),
+                  _c("v-divider"),
+                  _vm._v(" "),
+                  _c(
+                    "v-stepper-step",
+                    { attrs: { complete: _vm.e1 > 2, step: "2" } },
+                    [_vm._v("Patient Emegency Contact")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-stepper-items",
+                [
+                  _c(
+                    "v-stepper-content",
+                    { attrs: { step: "1" } },
+                    [
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "first name*", required: "" },
+                                model: {
+                                  value: _vm.patient.firstName,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.patient, "firstName", $$v)
+                                  },
+                                  expression: "patient.firstName"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "middle name*", required: "" },
+                                model: {
+                                  value: _vm.patient.middleName,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.patient, "middleName", $$v)
+                                  },
+                                  expression: "patient.middleName"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "last name*", required: "" },
+                                model: {
+                                  value: _vm.patient.lastName,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.patient, "lastName", $$v)
+                                  },
+                                  expression: "patient.lastName"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Medical Record Number*",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.patient.medicalRecordNumber,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient,
+                                      "medicalRecordNumber",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "patient.medicalRecordNumber"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-select", {
+                                attrs: { items: _vm.genders, label: "Gender" },
+                                model: {
+                                  value: _vm.patient.gender,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.patient, "gender", $$v)
+                                  },
+                                  expression: "patient.gender"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c(
+                                "v-dialog",
+                                {
+                                  ref: "dialog",
+                                  attrs: {
+                                    "return-value": _vm.patient.dateOfBirth,
+                                    persistent: "",
+                                    width: "290px"
+                                  },
+                                  on: {
+                                    "update:returnValue": function($event) {
+                                      return _vm.$set(
+                                        _vm.patient,
+                                        "dateOfBirth",
+                                        $event
+                                      )
+                                    },
+                                    "update:return-value": function($event) {
+                                      return _vm.$set(
+                                        _vm.patient,
+                                        "dateOfBirth",
+                                        $event
+                                      )
+                                    }
+                                  },
+                                  scopedSlots: _vm._u([
+                                    {
+                                      key: "activator",
+                                      fn: function(ref) {
+                                        var on = ref.on
+                                        return [
+                                          _c(
+                                            "v-text-field",
+                                            _vm._g(
+                                              {
+                                                attrs: {
+                                                  label: "Date of birth",
+                                                  readonly: ""
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.patient.dateOfBirth,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.patient,
+                                                      "dateOfBirth",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "patient.dateOfBirth"
+                                                }
+                                              },
+                                              on
+                                            )
+                                          )
+                                        ]
+                                      }
+                                    }
+                                  ]),
+                                  model: {
+                                    value: _vm.datePickerModal,
+                                    callback: function($$v) {
+                                      _vm.datePickerModal = $$v
+                                    },
+                                    expression: "datePickerModal"
+                                  }
+                                },
+                                [
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-date-picker",
+                                    {
+                                      attrs: { scrollable: "" },
+                                      model: {
+                                        value: _vm.patient.dateOfBirth,
+                                        callback: function($$v) {
+                                          _vm.$set(
+                                            _vm.patient,
+                                            "dateOfBirth",
+                                            $$v
+                                          )
+                                        },
+                                        expression: "patient.dateOfBirth"
+                                      }
+                                    },
+                                    [
+                                      _c("v-spacer"),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { text: "", color: "primary" },
+                                          on: {
+                                            click: function($event) {
+                                              _vm.datePickerModal = false
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Cancel")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { text: "", color: "primary" },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.$refs.dialog.save(
+                                                _vm.date
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("OK")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Religion*", required: "" },
+                                model: {
+                                  value: _vm.patient.religion,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.patient, "religion", $$v)
+                                  },
+                                  expression: "patient.religion"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "5", md: "4" } },
+                            [
+                              _c("v-checkbox", {
+                                attrs: { label: "Interpreter" },
+                                model: {
+                                  value: _vm.interpreterRequired,
+                                  callback: function($$v) {
+                                    _vm.interpreterRequired = $$v
+                                  },
+                                  expression: "interpreterRequired"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-select", {
+                                attrs: {
+                                  disabled: !_vm.interpreterRequired,
+                                  items: _vm.languages,
+                                  label: "Language",
+                                  "item-text": "name",
+                                  "return-object": "",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.patient.language,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.patient, "language", $$v)
+                                  },
+                                  expression: "patient.language"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Region", required: "" },
+                                model: {
+                                  value: _vm.patient.address.region,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.patient.address, "region", $$v)
+                                  },
+                                  expression: "patient.address.region"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Woreda", required: "" },
+                                model: {
+                                  value: _vm.patient.address.woreda,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.patient.address, "woreda", $$v)
+                                  },
+                                  expression: "patient.address.woreda"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Kebele", required: "" },
+                                model: {
+                                  value: _vm.patient.address.kebele,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.patient.address, "kebele", $$v)
+                                  },
+                                  expression: "patient.address.kebele"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "House Number", required: "" },
+                                model: {
+                                  value: _vm.patient.address.houseNumber,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.address,
+                                      "houseNumber",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "patient.address.houseNumber"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "tel Phone  Number",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.patient.address.telPhoneNumber,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.address,
+                                      "telPhoneNumber",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "patient.address.telPhoneNumber"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Mobile Phone Number",
+                                  required: ""
+                                },
+                                model: {
+                                  value: _vm.patient.address.mobilePhoneNumber,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.address,
+                                      "mobilePhoneNumber",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.address.mobilePhoneNumber"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "primary" },
+                          on: {
+                            click: function($event) {
+                              _vm.e1 = 2
+                            }
+                          }
+                        },
+                        [_vm._v("Continue")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialog = false
+                            }
+                          }
+                        },
+                        [_vm._v("Cancel")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-stepper-content",
+                    { attrs: { step: "2" } },
+                    [
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "first name*", required: "" },
+                                model: {
+                                  value: _vm.patient.emergencyContact.firstName,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.emergencyContact,
+                                      "firstName",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.emergencyContact.firstName"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "middle name*", required: "" },
+                                model: {
+                                  value:
+                                    _vm.patient.emergencyContact.middleName,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.emergencyContact,
+                                      "middleName",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.emergencyContact.middleName"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "last name*", required: "" },
+                                model: {
+                                  value: _vm.patient.emergencyContact.lastName,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.emergencyContact,
+                                      "lastName",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.emergencyContact.lastName"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Region", required: "" },
+                                model: {
+                                  value:
+                                    _vm.patient.emergencyContact.address.region,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.emergencyContact.address,
+                                      "region",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.emergencyContact.address.region"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Woreda", required: "" },
+                                model: {
+                                  value:
+                                    _vm.patient.emergencyContact.address.woreda,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.emergencyContact.address,
+                                      "woreda",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.emergencyContact.address.woreda"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Kebele", required: "" },
+                                model: {
+                                  value:
+                                    _vm.patient.emergencyContact.address.kebele,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.emergencyContact.address,
+                                      "kebele",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.emergencyContact.address.kebele"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "House Number", required: "" },
+                                model: {
+                                  value:
+                                    _vm.patient.emergencyContact.address
+                                      .houseNumber,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.emergencyContact.address,
+                                      "houseNumber",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.emergencyContact.address.houseNumber"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Tele Phone  Number",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.patient.emergencyContact.address
+                                      .telPhoneNumber,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.emergencyContact.address,
+                                      "telPhoneNumber",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.emergencyContact.address.telPhoneNumber"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "4" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Mobile Phone Number",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.patient.emergencyContact.address
+                                      .mobilePhoneNumber,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.patient.emergencyContact.address,
+                                      "mobilePhoneNumber",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "patient.emergencyContact.address.mobilePhoneNumber"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "primary" },
+                          on: {
+                            click: function($event) {
+                              return _vm.onSaveNewPatient()
+                            }
+                          }
+                        },
+                        [_vm._v("Save")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.e1 = 1
+                            },
+                            "": function($event) {}
+                          }
+                        },
+                        [_vm._v("Back")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       )
@@ -42756,7 +44233,7 @@ var render = function() {
       _c(
         "v-dialog",
         {
-          attrs: { persistent: "", "max-width": "600px" },
+          attrs: { persistent: "", "max-width": "650px" },
           model: {
             value: _vm.dialog,
             callback: function($$v) {
@@ -99818,6 +101295,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PatientDetail_vue_vue_type_template_id_a84a62d8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PatientDetail_vue_vue_type_template_id_a84a62d8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/patients/components/ImagingRequest.vue":
+/*!*******************************************************************!*\
+  !*** ./resources/js/views/patients/components/ImagingRequest.vue ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ImagingRequest_vue_vue_type_template_id_441b294e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ImagingRequest.vue?vue&type=template&id=441b294e& */ "./resources/js/views/patients/components/ImagingRequest.vue?vue&type=template&id=441b294e&");
+/* harmony import */ var _ImagingRequest_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ImagingRequest.vue?vue&type=script&lang=js& */ "./resources/js/views/patients/components/ImagingRequest.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ImagingRequest_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ImagingRequest_vue_vue_type_template_id_441b294e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ImagingRequest_vue_vue_type_template_id_441b294e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/patients/components/ImagingRequest.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/patients/components/ImagingRequest.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/views/patients/components/ImagingRequest.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagingRequest_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ImagingRequest.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/patients/components/ImagingRequest.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagingRequest_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/patients/components/ImagingRequest.vue?vue&type=template&id=441b294e&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/views/patients/components/ImagingRequest.vue?vue&type=template&id=441b294e& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagingRequest_vue_vue_type_template_id_441b294e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ImagingRequest.vue?vue&type=template&id=441b294e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/patients/components/ImagingRequest.vue?vue&type=template&id=441b294e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagingRequest_vue_vue_type_template_id_441b294e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ImagingRequest_vue_vue_type_template_id_441b294e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

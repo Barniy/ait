@@ -34,18 +34,20 @@
         </v-tabs-items>
       </v-card-text>
       <v-card-text>
-        <LabRequest></LabRequest>
+        <LabRequest v-if="tab== '0'"></LabRequest>
+        <ImagingRequest v-if="tab== '1'"></ImagingRequest>
       </v-card-text>
     </v-card>
   </v-container>
 </template>
-
 <script>
 import LabRequest from "./LabRequest.vue";
+import ImagingRequest from "./ImagingRequest.vue";
 export default {
   name: "PatientExamination",
   components: {
-    LabRequest
+    LabRequest,
+    ImagingRequest
   },
   data() {
     return {
