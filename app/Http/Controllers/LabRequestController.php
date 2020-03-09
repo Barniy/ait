@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Patient;
 use Illuminate\Http\Request;
+use App\Http\Resources\LabRequestResource;
 
 class LabRequestController extends Controller
 {
@@ -34,7 +36,6 @@ class LabRequestController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
@@ -43,9 +44,15 @@ class LabRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $patient = Patient::findOrFail($request->input('patientId'));
+
+        return response()->json([
+            'data' =>  LabRequestResource::collection($patient->labRequests),
+            'message' => '',
+            'success' => true
+        ]);
     }
 
     /**
