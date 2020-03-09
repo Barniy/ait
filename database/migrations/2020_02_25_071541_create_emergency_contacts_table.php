@@ -20,7 +20,6 @@ class CreateEmergencyContactsTable extends Migration
             $table->string('first_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->enum('gender', ['Female', 'Male'])->nullable();
             $table->timestamps();
         });
     }

@@ -16,16 +16,17 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="5">
-                    <v-text-field label="Provisional Diagnosis"></v-text-field>
+                    <v-text-field label="Provisional Diagnosis" v-model="provisionalDiagnosis"></v-text-field>
                     <v-row>
                       <v-col cols="12" sm="6">
                         <header>Patient Condition</header>
                         <v-switch
                           v-for="condition in patientConditions"
-                          :key="condition.id"
+                          :key="condition.key"
                           inset
-                          :label="condition.title"
-                          :value="condition.id"
+                          v-model="condition.isChecked"
+                          :label="condition.description"
+                          :value="condition.isChecked"
                         ></v-switch>
                       </v-col>
                       <v-col cols="12" sm="6">
@@ -34,17 +35,23 @@
                           v-for="imaging in imagingTests"
                           :key="imaging.key"
                           inset
+                          v-model="imaging.isChecked"
                           :label="imaging.description"
-                          :value="imaging.description"
+                          :value="imaging.isChecked"
                         ></v-switch>
                       </v-col>
                     </v-row>
                   </v-col>
                   <v-col cols="12" sm="6" justify>
-                    <v-textarea class="mx-2" label="Clinical Information" rows="1"></v-textarea>
+                    <v-textarea
+                      class="mx-2"
+                      v-model="clinicalInformation"
+                      label="Clinical Information"
+                      rows="1"
+                    ></v-textarea>
                     <v-textarea
                       outlined
-                      v-model="clinicalInformation"
+                      v-model="note"
                       name="input-7-4"
                       rows="16"
                       label="Procedure"
@@ -57,7 +64,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1" text @click="imagingRequestDialog = false">Cancel</v-btn>
-            <v-btn color="blue darken-1" text @click="labRequestDialog = false">Save</v-btn>
+            <v-btn color="blue darken-1" text @click="onSaveImagimgRequest">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -68,31 +75,26 @@
 <script>
 export default {
   name: "ImagingRequest",
+  props: ["id"],
   data: () => ({
     imagingTests: [],
     clinicalInformation: "",
-    patientConditions: [
-      { id: "1", title: "Any Known Allergies?", value: "allergies" },
-      { id: "2", title: "Hyberthyroidism?", value: "hyberthyroidism" },
-      { id: "3", title: "Intramedullary Nail?", value: "intramedullary_nail" },
-      { id: "4", title: "Cardiac Pacemaker?", value: "cardiac_pacemaker" },
-      {
-        id: "5",
-        title: "Carebral Aneurysm Clip?",
-        value: "carebral_aneurysm_clip"
-      },
-      { id: "6", title: "Joint Replacement?", value: "joint_replacement" }
-    ],
-    priority: "0",
+    provisionalDiagnosis: "",
+    patientConditions: [],
     note: "",
     imagingRequestDialog: false
   }),
+  computed: {
+    loggedIn: () => {
+      return window.user;
+    }
+  },
   methods: {
-    getLookupLabTestAttributes() {
+    getLookupImagingTestAttributes() {
       axios
         .get("/api/attributeExamination/", {
           params: {
-            type: "IMAGINGTEST"
+            type: "imaging"
           }
         })
         .then(result => {
@@ -101,11 +103,53 @@ export default {
         .catch(err => {
           console.error(err);
         });
+    },
+    getLookupConditionAttributes() {
+      axios
+        .get("/api/attributeConditions")
+        .then(result => {
+          this.patientConditions = result.data.data;
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    onSaveImagimgRequest() {
+      let patientConditions = [];
+      this.patientConditions.forEach(condition => {
+        if (condition.isChecked) {
+          patientConditions.push(condition.key);
+        }
+      });
+      let imagingTests = [];
+      this.imagingTests.forEach(test => {
+        if (test.isChecked) {
+          imagingTests.push(test.key);
+        }
+      });
+
+      axios
+        .post("/api/patients/addImagingRequest", {
+          patientId: this.id,
+          userId: this.loggedIn.user.id,
+          provisionalDiagnosis: this.provisionalDiagnosis,
+          clinicalInformation: this.clinicalInformation,
+          patientConditions: patientConditions,
+          examinationRequested: imagingTests,
+          description: this.note,
+          status: "CREATED"
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
   },
-  computed: {},
   created() {
-    this.getLookupLabTestAttributes();
+    this.getLookupImagingTestAttributes();
+    this.getLookupConditionAttributes();
   }
 };
 </script>

@@ -14,9 +14,9 @@
           <v-form>
             <v-container>
               <v-row>
-                <v-col cols="12" sm="6" v-for="specimen in specimenType" :key="specimen.key">
+                <v-col cols="12" sm="6">
                   <v-autocomplete
-                    :items="specimen.attributeExaminationItems"
+                    :items="specimenType"
                     filled
                     v-model="specimenTest"
                     chips
@@ -29,24 +29,29 @@
                 <v-col cols="12" sm="6" justify>
                   <header>Priority</header>
                   <v-radio-group row v-model="priority">
-                    <v-radio value="0" label="STAT"></v-radio>
-                    <v-radio value="1" label="Routine"></v-radio>
-                    <v-radio value="3" label="Urgent"></v-radio>
+                    <v-radio value="STAT" label="STAT" checked></v-radio>
+                    <v-radio value="ROUTIEN" label="Routine"></v-radio>
+                    <v-radio value="URGENT" label="Urgent"></v-radio>
                   </v-radio-group>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12" sm="6" v-for="test in labType" :key="test.key">
-                  <v-autocomplete
+                  <v-select
                     :items="test.attributeExaminationItems"
                     filled
                     chips
-                    v-model="labTest"
+                    v-model="labTests"
                     item-text="description"
                     item-value="key"
                     :label="test.description"
                     multiple
-                  ></v-autocomplete>
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <v-text-field label="note" required v-model="note"></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -55,7 +60,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="labRequestDialog = false">Cancel</v-btn>
-          <v-btn color="blue darken-1" text @click="labRequestDialog = false">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="onSaveLabRequest">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -63,23 +68,43 @@
 </template>
 
 <script>
+import Auth from "../../../auth";
 export default {
   name: "LabRequest",
+  props: ["id"],
   data() {
     return {
       labRequestDialog: false,
       tests: [],
       labType: [],
-      labTest: [],
+      labTests: [],
       specimenType: [],
       specimenTest: [],
-      priority: "0",
+      priority: "STAT",
       note: ""
     };
   },
+  computed: {
+    loggedIn: () => {
+      return window.user;
+    }
+  },
   methods: {
     remove(item) {},
-    submit() {},
+    onSaveLabRequest() {
+      axios
+        .post("/api/patients/addLabRequest", {
+          patientId: this.id,
+          specimentType: this.specimenTest,
+          labTests: this.labTests,
+          priority: this.priority,
+          userId: this.loggedIn.user.id,
+          description: this.note,
+          status: "CREATED"
+        })
+        .then(function(response) {})
+        .catch(function(error) {});
+    },
     getLookupLabTestAttributes() {
       axios
         .get("/api/attributeExamination/", {
@@ -98,7 +123,7 @@ export default {
       axios
         .get("/api/attributeExamination/", {
           params: {
-            type: "SPECIMENTTYPE"
+            type: "Specimen"
           }
         })
         .then(result => {

@@ -25,3 +25,5 @@ Route::post('patients/addImagingRequest', 'Patient\PatientController@addImagingR
 Route::resource('vitals', 'VitalController');
 Route::resource('languages', 'LanguageController');
 Route::resource('attributeExamination', 'AttributeExaminationController');
+Route::resource('attributeConditions', 'AttributeConditionController');
+Route::resource('imagingRequests', 'ImagingRequestController');

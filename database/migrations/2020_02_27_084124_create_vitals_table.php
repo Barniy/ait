@@ -14,7 +14,7 @@ class CreateVitalsTable extends Migration
     public function up()
     {
         Schema::create('vitals', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->uuid('patient_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');

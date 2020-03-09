@@ -19,7 +19,9 @@ class CreateLabRequestsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('examinations')->nullable();
+            $table->string('specimen_type')->nullable();
+            $table->string('priority')->nullable();
+            $table->string('lab_tests')->nullable();
             $table->string('description')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();

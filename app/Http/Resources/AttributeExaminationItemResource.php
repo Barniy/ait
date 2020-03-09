@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class AttributeExaminationItemResource extends Resource
 {
@@ -16,8 +15,11 @@ class AttributeExaminationItemResource extends Resource
     public function toArray($request)
     {
         return [
-            'key' => $this->code,
-            'description' => $this->name,
+            'key' => $this->key,
+            'description' => $this->description,
+            'type' => $this->type,
+            'isChecked' => false,
+            'parent' =>   $this->AttributeExamination->key
         ];
     }
 }

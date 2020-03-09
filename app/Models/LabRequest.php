@@ -10,6 +10,10 @@ class LabRequest extends Model
 {
     protected $fillable = [];
     protected $guarded = [];
+    protected $casts = [
+        'specimen_type' => 'array',
+        'lab_tests' => 'array',
+    ];
     public function patient()
     {
         return $this->belongsTo(Patient::class);

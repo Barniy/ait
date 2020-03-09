@@ -10,7 +10,7 @@
     </v-toolbar>
     <PatientInformation v-if="onPatientInformation" v-bind:id="id"></PatientInformation>
     <PatientVital v-if="onPatientVital" v-bind:id="id"></PatientVital>
-    <PatientExamination v-if="onPatientExamination"></PatientExamination>
+    <PatientExamination v-if="onPatientExamination"  v-bind:id="id"></PatientExamination>
     <PatientPayment v-if="onPatientPayment"></PatientPayment>
   </div>
 </template>

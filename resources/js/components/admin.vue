@@ -59,11 +59,11 @@
     </v-app-bar>
     <v-content>
       <v-container class="fill-height" fluid>
-       <v-layout>
-       <v-flex>
-       <router-view></router-view>
-       </v-flex>
-       </v-layout>
+        <v-layout>
+          <v-flex>
+            <router-view></router-view>
+          </v-flex>
+        </v-layout>
       </v-container>
     </v-content>
   </v-app>
@@ -71,12 +71,11 @@
 
 <script>
 export default {
-    name: 'Admin',
+  name: "Admin",
   props: {
     source: String
   },
   data: () => ({
-
     drawer: null,
     items: [
       {
@@ -84,14 +83,73 @@ export default {
         text: "Dashboard",
         routeTo: "/admin/"
       },
-         {
+      {
         icon: "mdi-chevron-up",
         "icon-alt": "mdi-account-group",
         text: "Patients",
         model: false,
+        children: [{ text: "Patients", routeTo: "/admin/Patients" }]
+      },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Appointemnt",
+        model: false,
+        children: [{ text: "appoitments", routeTo: "/admin/appoitments" }]
+      },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Laboratory",
+        model: false,
         children: [
-          { text: "Patients", routeTo: "/admin/Patients" },
+          { text: "Pending", routeTo: "/admin/laboratory" },
+          { text: "Completed", routeTo: "/admin/laboratory" },
+          { text: "All", routeTo: "/admin/laboratory" }
         ]
+      },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Imaging",
+        model: false,
+        children: [
+          { text: "Pending", routeTo: "/admin/laboratory" },
+          { text: "Completed", routeTo: "/admin/laboratory" },
+          { text: "All", routeTo: "/admin/laboratory" }
+        ]
+      },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Pharmacy",
+        model: false,
+        children: [
+          { text: "Billed", routeTo: "/admin/laboratory" },
+          { text: "Prepaid", routeTo: "/admin/laboratory" },
+          { text: "Dispensed", routeTo: "/admin/laboratory" }
+        ]
+      },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Ward",
+        model: false,
+        children: [{ text: "Wards", routeTo: "/admin/Ward" }]
+      },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Billing",
+        model: false,
+        children: [{ text: "Billings", routeTo: "/admin/Billing" }]
+      },
+      {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "report",
+        model: false,
+        children: [{ text: "Report", routeTo: "/admin/Report" }]
       },
       {
         icon: "mdi-chevron-up",

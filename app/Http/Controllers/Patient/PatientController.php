@@ -254,11 +254,17 @@ class PatientController extends Controller
 
     public function addLabRequest(Request $request)
     {
+
+
         $patient = Patient::findOrFail($request->patientId);
 
         $patient->labRequests()->create([
+            'specimen_type' => $request->specimentType,
+            'lab_tests' => $request->labTests,
+            'priority' => $request->priority,
             'user_id' => $request->userId,
             'description' =>  $request->description,
+            'status' => $request->status,
         ]);
 
         return response()->json([
@@ -270,11 +276,17 @@ class PatientController extends Controller
 
     public function addImagingRequest(Request $request)
     {
-        $patient = Patient::findOrFail($request->patientId);
+
+        $patient = Patient::findOrFail($request->input('patientId'));
 
         $patient->imagingRequests()->create([
-            'user_id' => $request->userId,
-            'description' =>  $request->description,
+            'provisional_diagnosis' => $request->input('provisionalDiagnosis'),
+            'clinical_information' => $request->input('clinicalInformation'),
+            'patient_condition' => $request->input('patientConditions'),
+            'examination_requested' => $request->input('examinationRequested'),
+            'user_id' => $request->input('userId'),
+            'description' =>  $request->input('description'),
+            'status' => $request->input('status')
         ]);
 
         return response()->json([

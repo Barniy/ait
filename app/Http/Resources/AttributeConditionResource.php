@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\Resource;
 
-class AttributeExaminationResource extends JsonResource
+class AttributeConditionResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -18,8 +18,7 @@ class AttributeExaminationResource extends JsonResource
             'key' => $this->key,
             'description' => $this->description,
             'type' => $this->type,
-            'isChecked' => false,
-            'attributeExaminationItems' =>  AttributeExaminationItemResource::collection($this->attributeExaminationItems)
+            'isChecked' => false
         ];
     }
 }

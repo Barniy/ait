@@ -1980,7 +1980,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'Admin',
+  name: "Admin",
   props: {
     source: String
   },
@@ -1999,6 +1999,87 @@ __webpack_require__.r(__webpack_exports__);
         children: [{
           text: "Patients",
           routeTo: "/admin/Patients"
+        }]
+      }, {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Appointemnt",
+        model: false,
+        children: [{
+          text: "appoitments",
+          routeTo: "/admin/appoitments"
+        }]
+      }, {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Laboratory",
+        model: false,
+        children: [{
+          text: "Pending",
+          routeTo: "/admin/laboratory"
+        }, {
+          text: "Completed",
+          routeTo: "/admin/laboratory"
+        }, {
+          text: "All",
+          routeTo: "/admin/laboratory"
+        }]
+      }, {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Imaging",
+        model: false,
+        children: [{
+          text: "Pending",
+          routeTo: "/admin/laboratory"
+        }, {
+          text: "Completed",
+          routeTo: "/admin/laboratory"
+        }, {
+          text: "All",
+          routeTo: "/admin/laboratory"
+        }]
+      }, {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Pharmacy",
+        model: false,
+        children: [{
+          text: "Billed",
+          routeTo: "/admin/laboratory"
+        }, {
+          text: "Prepaid",
+          routeTo: "/admin/laboratory"
+        }, {
+          text: "Dispensed",
+          routeTo: "/admin/laboratory"
+        }]
+      }, {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Ward",
+        model: false,
+        children: [{
+          text: "Wards",
+          routeTo: "/admin/Ward"
+        }]
+      }, {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "Billing",
+        model: false,
+        children: [{
+          text: "Billings",
+          routeTo: "/admin/Billing"
+        }]
+      }, {
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-account-group",
+        text: "report",
+        model: false,
+        children: [{
+          text: "Report",
+          routeTo: "/admin/Report"
         }]
       }, {
         icon: "mdi-chevron-up",
@@ -2424,60 +2505,86 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ImagingRequest",
+  props: ["id"],
   data: function data() {
     return {
       imagingTests: [],
       clinicalInformation: "",
-      patientConditions: [{
-        id: "1",
-        title: "Any Known Allergies?",
-        value: "allergies"
-      }, {
-        id: "2",
-        title: "Hyberthyroidism?",
-        value: "hyberthyroidism"
-      }, {
-        id: "3",
-        title: "Intramedullary Nail?",
-        value: "intramedullary_nail"
-      }, {
-        id: "4",
-        title: "Cardiac Pacemaker?",
-        value: "cardiac_pacemaker"
-      }, {
-        id: "5",
-        title: "Carebral Aneurysm Clip?",
-        value: "carebral_aneurysm_clip"
-      }, {
-        id: "6",
-        title: "Joint Replacement?",
-        value: "joint_replacement"
-      }],
-      priority: "0",
+      provisionalDiagnosis: "",
+      patientConditions: [],
       note: "",
       imagingRequestDialog: false
     };
   },
+  computed: {
+    loggedIn: function loggedIn() {
+      return window.user;
+    }
+  },
   methods: {
-    getLookupLabTestAttributes: function getLookupLabTestAttributes() {
+    getLookupImagingTestAttributes: function getLookupImagingTestAttributes() {
       var _this = this;
 
       axios.get("/api/attributeExamination/", {
         params: {
-          type: "IMAGINGTEST"
+          type: "imaging"
         }
       }).then(function (result) {
         _this.imagingTests = result.data.data;
       })["catch"](function (err) {
         console.error(err);
       });
+    },
+    getLookupConditionAttributes: function getLookupConditionAttributes() {
+      var _this2 = this;
+
+      axios.get("/api/attributeConditions").then(function (result) {
+        _this2.patientConditions = result.data.data;
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    },
+    onSaveImagimgRequest: function onSaveImagimgRequest() {
+      var patientConditions = [];
+      this.patientConditions.forEach(function (condition) {
+        if (condition.isChecked) {
+          patientConditions.push(condition.key);
+        }
+      });
+      var imagingTests = [];
+      this.imagingTests.forEach(function (test) {
+        if (test.isChecked) {
+          imagingTests.push(test.key);
+        }
+      });
+      axios.post("/api/patients/addImagingRequest", {
+        patientId: this.id,
+        userId: this.loggedIn.user.id,
+        provisionalDiagnosis: this.provisionalDiagnosis,
+        clinicalInformation: this.clinicalInformation,
+        patientConditions: patientConditions,
+        examinationRequested: imagingTests,
+        description: this.note,
+        status: "CREATED"
+      }).then(function (res) {
+        console.log(res);
+      })["catch"](function (err) {
+        console.error(err);
+      });
     }
   },
-  computed: {},
   created: function created() {
-    this.getLookupLabTestAttributes();
+    this.getLookupImagingTestAttributes();
+    this.getLookupConditionAttributes();
   }
 });
 
@@ -2492,6 +2599,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../auth */ "./resources/js/auth.js");
 //
 //
 //
@@ -2556,23 +2664,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "LabRequest",
+  props: ["id"],
   data: function data() {
     return {
       labRequestDialog: false,
       tests: [],
       labType: [],
-      labTest: [],
+      labTests: [],
       specimenType: [],
       specimenTest: [],
-      priority: "0",
+      priority: "STAT",
       note: ""
     };
   },
+  computed: {
+    loggedIn: function loggedIn() {
+      return window.user;
+    }
+  },
   methods: {
     remove: function remove(item) {},
-    submit: function submit() {},
+    onSaveLabRequest: function onSaveLabRequest() {
+      axios.post("/api/patients/addLabRequest", {
+        patientId: this.id,
+        specimentType: this.specimenTest,
+        labTests: this.labTests,
+        priority: this.priority,
+        userId: this.loggedIn.user.id,
+        description: this.note,
+        status: "CREATED"
+      }).then(function (response) {})["catch"](function (error) {});
+    },
     getLookupLabTestAttributes: function getLookupLabTestAttributes() {
       var _this = this;
 
@@ -2591,7 +2721,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/attributeExamination/", {
         params: {
-          type: "SPECIMENTTYPE"
+          type: "Specimen"
         }
       }).then(function (result) {
         _this2.specimenType = result.data.data;
@@ -2665,6 +2795,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PatientExamination",
+  props: ["id"],
   components: {
     LabRequest: _LabRequest_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     ImagingRequest: _ImagingRequest_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -2946,6 +3077,7 @@ __webpack_require__.r(__webpack_exports__);
       interpreterRequired: false,
       datePickerModal: false,
       patient: {
+        id: "",
         medicalRecordNumber: "",
         firstName: "",
         middleName: "",
@@ -40862,7 +40994,9 @@ var render = function() {
         ? _c("PatientVital", { attrs: { id: _vm.id } })
         : _vm._e(),
       _vm._v(" "),
-      _vm.onPatientExamination ? _c("PatientExamination") : _vm._e(),
+      _vm.onPatientExamination
+        ? _c("PatientExamination", { attrs: { id: _vm.id } })
+        : _vm._e(),
       _vm._v(" "),
       _vm.onPatientPayment ? _c("PatientPayment") : _vm._e()
     ],
@@ -40968,6 +41102,13 @@ var render = function() {
                                       _c("v-text-field", {
                                         attrs: {
                                           label: "Provisional Diagnosis"
+                                        },
+                                        model: {
+                                          value: _vm.provisionalDiagnosis,
+                                          callback: function($$v) {
+                                            _vm.provisionalDiagnosis = $$v
+                                          },
+                                          expression: "provisionalDiagnosis"
                                         }
                                       }),
                                       _vm._v(" "),
@@ -40986,11 +41127,25 @@ var render = function() {
                                                 _vm.patientConditions,
                                                 function(condition) {
                                                   return _c("v-switch", {
-                                                    key: condition.id,
+                                                    key: condition.key,
                                                     attrs: {
                                                       inset: "",
-                                                      label: condition.title,
-                                                      value: condition.id
+                                                      label:
+                                                        condition.description,
+                                                      value: condition.isChecked
+                                                    },
+                                                    model: {
+                                                      value:
+                                                        condition.isChecked,
+                                                      callback: function($$v) {
+                                                        _vm.$set(
+                                                          condition,
+                                                          "isChecked",
+                                                          $$v
+                                                        )
+                                                      },
+                                                      expression:
+                                                        "condition.isChecked"
                                                     }
                                                   })
                                                 }
@@ -41015,7 +41170,19 @@ var render = function() {
                                                   attrs: {
                                                     inset: "",
                                                     label: imaging.description,
-                                                    value: imaging.description
+                                                    value: imaging.isChecked
+                                                  },
+                                                  model: {
+                                                    value: imaging.isChecked,
+                                                    callback: function($$v) {
+                                                      _vm.$set(
+                                                        imaging,
+                                                        "isChecked",
+                                                        $$v
+                                                      )
+                                                    },
+                                                    expression:
+                                                      "imaging.isChecked"
                                                   }
                                                 })
                                               })
@@ -41044,6 +41211,13 @@ var render = function() {
                                         attrs: {
                                           label: "Clinical Information",
                                           rows: "1"
+                                        },
+                                        model: {
+                                          value: _vm.clinicalInformation,
+                                          callback: function($$v) {
+                                            _vm.clinicalInformation = $$v
+                                          },
+                                          expression: "clinicalInformation"
                                         }
                                       }),
                                       _vm._v(" "),
@@ -41055,11 +41229,11 @@ var render = function() {
                                           label: "Procedure"
                                         },
                                         model: {
-                                          value: _vm.clinicalInformation,
+                                          value: _vm.note,
                                           callback: function($$v) {
-                                            _vm.clinicalInformation = $$v
+                                            _vm.note = $$v
                                           },
-                                          expression: "clinicalInformation"
+                                          expression: "note"
                                         }
                                       })
                                     ],
@@ -41100,11 +41274,7 @@ var render = function() {
                         "v-btn",
                         {
                           attrs: { color: "blue darken-1", text: "" },
-                          on: {
-                            click: function($event) {
-                              _vm.labRequestDialog = false
-                            }
-                          }
+                          on: { click: _vm.onSaveImagimgRequest }
                         },
                         [_vm._v("Save")]
                       )
@@ -41215,37 +41385,31 @@ var render = function() {
                           _c(
                             "v-row",
                             [
-                              _vm._l(_vm.specimenType, function(specimen) {
-                                return _c(
-                                  "v-col",
-                                  {
-                                    key: specimen.key,
-                                    attrs: { cols: "12", sm: "6" }
-                                  },
-                                  [
-                                    _c("v-autocomplete", {
-                                      attrs: {
-                                        items:
-                                          specimen.attributeExaminationItems,
-                                        filled: "",
-                                        chips: "",
-                                        "item-text": "description",
-                                        "item-value": "key",
-                                        label: "Specimen Type",
-                                        multiple: ""
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", sm: "6" } },
+                                [
+                                  _c("v-autocomplete", {
+                                    attrs: {
+                                      items: _vm.specimenType,
+                                      filled: "",
+                                      chips: "",
+                                      "item-text": "description",
+                                      "item-value": "key",
+                                      label: "Specimen Type",
+                                      multiple: ""
+                                    },
+                                    model: {
+                                      value: _vm.specimenTest,
+                                      callback: function($$v) {
+                                        _vm.specimenTest = $$v
                                       },
-                                      model: {
-                                        value: _vm.specimenTest,
-                                        callback: function($$v) {
-                                          _vm.specimenTest = $$v
-                                        },
-                                        expression: "specimenTest"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              }),
+                                      expression: "specimenTest"
+                                    }
+                                  })
+                                ],
+                                1
+                              ),
                               _vm._v(" "),
                               _c(
                                 "v-col",
@@ -41267,15 +41431,25 @@ var render = function() {
                                     },
                                     [
                                       _c("v-radio", {
-                                        attrs: { value: "0", label: "STAT" }
+                                        attrs: {
+                                          value: "STAT",
+                                          label: "STAT",
+                                          checked: ""
+                                        }
                                       }),
                                       _vm._v(" "),
                                       _c("v-radio", {
-                                        attrs: { value: "1", label: "Routine" }
+                                        attrs: {
+                                          value: "ROUTIEN",
+                                          label: "Routine"
+                                        }
                                       }),
                                       _vm._v(" "),
                                       _c("v-radio", {
-                                        attrs: { value: "3", label: "Urgent" }
+                                        attrs: {
+                                          value: "URGENT",
+                                          label: "Urgent"
+                                        }
                                       })
                                     ],
                                     1
@@ -41284,7 +41458,7 @@ var render = function() {
                                 1
                               )
                             ],
-                            2
+                            1
                           ),
                           _vm._v(" "),
                           _c(
@@ -41297,7 +41471,7 @@ var render = function() {
                                   attrs: { cols: "12", sm: "6" }
                                 },
                                 [
-                                  _c("v-autocomplete", {
+                                  _c("v-select", {
                                     attrs: {
                                       items: test.attributeExaminationItems,
                                       filled: "",
@@ -41308,17 +41482,41 @@ var render = function() {
                                       multiple: ""
                                     },
                                     model: {
-                                      value: _vm.labTest,
+                                      value: _vm.labTests,
                                       callback: function($$v) {
-                                        _vm.labTest = $$v
+                                        _vm.labTests = $$v
                                       },
-                                      expression: "labTest"
+                                      expression: "labTests"
                                     }
                                   })
                                 ],
                                 1
                               )
                             }),
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { attrs: { cols: "12", sm: "6" } },
+                                [
+                                  _c("v-text-field", {
+                                    attrs: { label: "note", required: "" },
+                                    model: {
+                                      value: _vm.note,
+                                      callback: function($$v) {
+                                        _vm.note = $$v
+                                      },
+                                      expression: "note"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
                             1
                           )
                         ],
@@ -41353,11 +41551,7 @@ var render = function() {
                     "v-btn",
                     {
                       attrs: { color: "blue darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.labRequestDialog = false
-                        }
-                      }
+                      on: { click: _vm.onSaveLabRequest }
                     },
                     [_vm._v("Save")]
                   )
@@ -41541,9 +41735,13 @@ var render = function() {
           _c(
             "v-card-text",
             [
-              _vm.tab == "0" ? _c("LabRequest") : _vm._e(),
+              _vm.tab == "0"
+                ? _c("LabRequest", { attrs: { id: _vm.id } })
+                : _vm._e(),
               _vm._v(" "),
-              _vm.tab == "1" ? _c("ImagingRequest") : _vm._e()
+              _vm.tab == "1"
+                ? _c("ImagingRequest", { attrs: { id: _vm.id } })
+                : _vm._e()
             ],
             1
           )

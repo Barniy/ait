@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AttributeExamination;
-use App\Http\Resources\AttributeExaminationResource;
 use Illuminate\Http\Request;
 
-class AttributeExaminationController extends Controller
+class LabRequestController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-
-        return  AttributeExaminationResource::collection(AttributeExamination::where('type', $request->type)->get());
+        //
     }
 
     /**
@@ -43,10 +40,10 @@ class AttributeExaminationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\AttributeExamination  $attributeExamination
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(AttributeExamination $attributeExamination)
+    public function show($id)
     {
         //
     }
@@ -54,10 +51,10 @@ class AttributeExaminationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AttributeExamination  $attributeExamination
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(AttributeExamination $attributeExamination)
+    public function edit($id)
     {
         //
     }
@@ -66,10 +63,10 @@ class AttributeExaminationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\AttributeExamination  $attributeExamination
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AttributeExamination $attributeExamination)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -77,10 +74,10 @@ class AttributeExaminationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\AttributeExamination  $attributeExamination
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AttributeExamination $attributeExamination)
+    public function destroy($id)
     {
         //
     }

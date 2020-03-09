@@ -14,12 +14,13 @@ class CreateAttributeExaminationItemsTable extends Migration
     public function up()
     {
         Schema::create('attribute_examination_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name')->unique();
-            $table->string('code')->nullable();
+            $table->uuid('id')->primary();
+            $table->uuid('examination_id');
+            $table->foreign('examination_id')->references('id')->on('attribute_examinations');
+            $table->string('key')->unique();
+            $table->string('description')->nullable();
+            $table->string('type')->nullable();
             $table->string('status')->nullable();
-            $table->unsignedBigInteger('attribute_examination_id');
-            $table->foreign('attribute_examination_id')->references('id')->on('attribute_examinations')->onDelete('cascade');
             $table->timestamps();
         });
     }

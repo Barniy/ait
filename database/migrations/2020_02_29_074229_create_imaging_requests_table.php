@@ -18,7 +18,11 @@ class CreateImagingRequestsTable extends Migration
             $table->uuid('patient_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('provisional_diagnosis')->nullable();
+            $table->string('clinical_information')->nullable();
+            $table->string('patient_condition')->nullable();
+            $table->string('examination_requested')->nullable();
             $table->string('description')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();

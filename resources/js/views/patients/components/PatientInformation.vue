@@ -204,6 +204,7 @@ export default {
     interpreterRequired: false,
     datePickerModal: false,
     patient: {
+        id:"",
       medicalRecordNumber: "",
       firstName: "",
       middleName: "",
