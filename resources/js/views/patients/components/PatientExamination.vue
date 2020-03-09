@@ -10,7 +10,7 @@
           <v-tab-item v-for="item in items" :key="item.tab">
             <v-card flat>
               <v-list two-line>
-                <v-list-item-group>
+                <v-list-item-group v-if="tab== '0'">
                   <template v-for="(item, index) in lists">
                     <v-list-item :key="item.title">
                       <template>
@@ -28,6 +28,40 @@
                     <v-divider :key="index"></v-divider>
                   </template>
                 </v-list-item-group>
+                <v-list-item-group v-if="tab== '1'">
+                  <template v-for="(imagingRequest, index) in imagingRequests">
+                    <v-list-item
+                      :key="imagingRequest.id"
+                      @click="onImagingRequestedClicked(imagingRequest.id)"
+                    >
+                      <template>
+                        <v-list-item-content>
+                          <v-list-item-subtitle>
+                            <v-chip
+                              class="ma-1"
+                              v-for="(examination, index) in imagingRequest.requestedExaminations"
+                              :key="index"
+                            >{{ examination }}</v-chip>
+                          </v-list-item-subtitle>
+                          <v-list-item-subtitle>
+                            Requested By: Dr. {{imagingRequest.user.fullName}} | &nbsp;
+                            Date: {{imagingRequest.createdAt | formatDate}}
+                          </v-list-item-subtitle>
+                          <v-list-item-subtitle v-text="imagingRequest.provisionalDiagnosis"></v-list-item-subtitle>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-list-item-action-text>
+                            {{
+                            imagingRequest.status== 'CREATED'?'Unpaid': imagingRequest.status
+                            }}
+                          </v-list-item-action-text>
+                          <v-icon>mdi-circle-edit-outline</v-icon>
+                        </v-list-item-action>
+                      </template>
+                    </v-list-item>
+                    <v-divider :key="index"></v-divider>
+                  </template>
+                </v-list-item-group>
               </v-list>
             </v-card>
           </v-tab-item>
@@ -35,7 +69,11 @@
       </v-card-text>
       <v-card-text>
         <LabRequest v-if="tab== '0'" v-bind:id="id"></LabRequest>
-        <ImagingRequest v-if="tab== '1'" v-bind:id="id"></ImagingRequest>
+        <ImagingRequest
+          v-if="tab== '1'"
+          v-bind:id="id"
+          v-bind:imagingRequest="selectedImagingRequest"
+        ></ImagingRequest>
       </v-card-text>
     </v-card>
   </v-container>
@@ -53,6 +91,8 @@ export default {
   data() {
     return {
       tab: null,
+      imagingRequests: [],
+      selectedImagingRequest: null,
       lists: [
         {
           action: "pending",
@@ -119,6 +159,26 @@ export default {
         { tab: "Imaging", content: "Imaging" }
       ]
     };
+  },
+  methods: {
+    getImagingRequest() {
+      axios
+        .get("/api/patientImagingRequests", {
+          params: { patientId: this.id }
+        })
+        .then(response => {
+          this.imagingRequests = response.data.data;
+        })
+        .catch(error => {});
+    },
+    onImagingRequestedClicked(id) {
+      this.selectedImagingRequest = this.imagingRequests.filter(
+        imagingRequest => imagingRequest.id == id
+      );
+    }
+  },
+  created() {
+    this.getImagingRequest();
   }
 };
 </script>

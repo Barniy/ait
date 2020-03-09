@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Http\Traits\UsesUuid;
 use App\Patient;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class ImagingRequest extends Model
 {
+    use UsesUuid;
     protected $fillable = [];
     protected $guarded = [];
     protected $casts = [

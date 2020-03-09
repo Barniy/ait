@@ -47,9 +47,15 @@ class ImagingRequestController extends Controller
      */
     public function show(Request $request)
     {
+
+
         $patient = Patient::findOrFail($request->input('patientId'));
 
-        return  ImagingRequestResource::collection($patient->imagingRequests);
+        return response()->json([
+            'data' =>  ImagingRequestResource::collection($patient->imagingRequests),
+            'message' => '',
+            'success' => true
+        ]);
     }
 
     /**

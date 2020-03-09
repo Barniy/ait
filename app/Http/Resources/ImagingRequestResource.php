@@ -19,10 +19,11 @@ class ImagingRequestResource extends Resource
             'provisionalDiagnosis' => $this->provisional_diagnosis,
             'clinicalInformation' => $this->clinical_information,
             'patientCondition' => $this->patient_condition,
-            'examinationRequested' => $this->examination_requested,
+            'requestedExaminations' => $this->examination_requested,
             'user' => new UserResource($this->user),
             'description' => $this->description,
-            'status' =>  $this->status
+            'status' =>  $this->status,
+            'createdAt' => $this->created_at
         ];
     }
 }

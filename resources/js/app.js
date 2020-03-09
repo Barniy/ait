@@ -10,7 +10,7 @@ window.Vue = require('vue');
 
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
-
+import moment from 'moment'
 const vuetifyOptions = {};
 
 Vue.use(Vuetify);
@@ -21,6 +21,12 @@ import Auth from './auth';
 
 Vue.prototype.$auth = new Auth(window.user);
 Vue.component('admin', require('./components/admin.vue').default);
+
+Vue.filter('formatDate', function (value) {
+    if (value) {
+        return moment(String(value)).format('MM/DD/YYYY');
+    }
+});
 
 
 import Dashboard from './views/dashboard/Dashboard';
