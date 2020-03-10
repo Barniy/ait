@@ -5,10 +5,11 @@ namespace App;
 
 use App\Address;
 use App\Models\Department;
-use App\Http\Traits\UsesUuid;
-use App\Models\ImagingRequest;
 use App\Models\LabRequest;
+use App\Models\Appointment;
+use App\Http\Traits\UsesUuid;
 use App\Models\Patient\Vital;
+use App\Models\ImagingRequest;
 use Illuminate\Database\Eloquent\Model;
 
 class Patient extends Model
@@ -67,5 +68,10 @@ class Patient extends Model
 
         $patient->delete();
         return true;
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
     }
 }

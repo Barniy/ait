@@ -30,9 +30,10 @@
         @click:row="patientDetail"
       >
         <template v-slot:item.action="{ item }">
-          <v-icon medium class="mr-2" @click.stop="onEditPatient(item)">mdi-calendar</v-icon>
+          <v-icon medium class="mr-2" @click.stop="onCalendarClicked(item)">mdi-calendar</v-icon>
         </template>
       </v-data-table>
+      <Appointement v-bind:appointmentModal="appointmentModal" @clicked="addAppointment"></Appointement>
     </v-card>
     <v-dialog v-model="dialog" persistent max-width="850px">
       <v-stepper v-model="e1">
@@ -214,11 +215,17 @@
   </v-container>
 </template>
 <script>
+import Appointement from "../appointment/appointment";
 export default {
   name: "Patients",
+  components: {
+    Appointement
+  },
   data() {
     return {
       dialog: false,
+      selectedPatient: null,
+      appointmentModal: false,
       datePickerModal: "",
       interpreterRequired: false,
       date: new Date().toISOString().substr(0, 10),
@@ -329,6 +336,28 @@ export default {
         .post("/api/patients", this.patient)
         .then(response => console.log(response))
         .catch(error => {});
+    },
+    onCalendarClicked(item) {
+      this.appointmentModal = !this.appointmentModal;
+      this.selectedPatient = item;
+    },
+    addAppointment(appointmen) {
+      console.log(appointmen);
+      axios
+        .post("/api/appointments", {
+          patientId: this.selectedPatient.id,
+          appointmentTitle: appointmen.appointementTitle,
+          appointmentDescription: appointmen.appointementDescription,
+          appointmentDate: appointmen.appointementDate,
+          userId: this.loggedIn.user.id
+        })
+        .then(function(response) {})
+        .catch(function(error) {});
+    }
+  },
+  computed: {
+    loggedIn: () => {
+      return window.user;
     }
   },
   watch: {

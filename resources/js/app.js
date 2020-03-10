@@ -10,7 +10,11 @@ window.Vue = require('vue');
 
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
-import moment from 'moment'
+import moment from 'moment';
+import '@mdi/font/css/materialdesignicons.css';
+
+
+
 const vuetifyOptions = {};
 
 Vue.use(Vuetify);
@@ -36,6 +40,7 @@ import Role from './views/users/Roles';
 import Permissions from './views/users/Permissions';
 import Patients from './views/patients/patients';
 import PatientDetail from './views/patients/PatientDetail';
+import Appointment from './views/appointment/appointment';
 const routes = [{
         path: "/admin/",
         component: Dashboard
@@ -59,6 +64,10 @@ const routes = [{
     {
         path: '/admin/patients',
         component: Patients
+    },
+    {
+        path: '/admin/appointment',
+        component: Appointment
     },
     {
         path: '/admin/patient/:id',

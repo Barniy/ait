@@ -16,7 +16,7 @@
               <v-row>
                 <v-col cols="12" sm="6">
                   <v-autocomplete
-                    :items="specimenType"
+                    :items="lab.specimenType"
                     filled
                     v-model="specimenTest"
                     chips
@@ -28,8 +28,8 @@
                 </v-col>
                 <v-col cols="12" sm="6" justify>
                   <header>Priority</header>
-                  <v-radio-group row v-model="priority">
-                    <v-radio value="STAT" label="STAT" checked></v-radio>
+                  <v-radio-group row v-model="lab.priority">
+                    <v-radio value="STAT" label="STAT"></v-radio>
                     <v-radio value="ROUTIEN" label="Routine"></v-radio>
                     <v-radio value="URGENT" label="Urgent"></v-radio>
                   </v-radio-group>
@@ -51,7 +51,7 @@
               </v-row>
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-text-field label="note" required v-model="note"></v-text-field>
+                  <v-text-field label="note" required v-model="lab.description"></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -71,7 +71,7 @@
 import Auth from "../../../auth";
 export default {
   name: "LabRequest",
-  props: ["id"],
+  props: ["id", "labRequest"],
   data() {
     return {
       labRequestDialog: false,
@@ -81,8 +81,26 @@ export default {
       specimenType: [],
       specimenTest: [],
       priority: "STAT",
-      note: ""
+      note: "",
+      lab: {
+        id: "",
+        specimenType: [],
+        LabTests: [],
+        priority: "",
+        description: "",
+        status: "",
+        createdAt: "",
+        user: null
+      }
     };
+  },
+  watch: {
+    labRequest: function() {
+      console.log("fire");
+      this.lab = Object.assign({}, ...this.labRequest);
+
+      this.labRequestDialog = true;
+    }
   },
   computed: {
     loggedIn: () => {

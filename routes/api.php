@@ -26,5 +26,6 @@ Route::resource('vitals', 'VitalController');
 Route::resource('languages', 'LanguageController');
 Route::resource('attributeExamination', 'AttributeExaminationController');
 Route::resource('attributeConditions', 'AttributeConditionController');
+Route::resource('appointments', 'AppointmentController');
 Route::get('patientImagingRequests', 'ImagingRequestController@show');
 Route::get('patientLabRequests', 'LabRequestController@show');

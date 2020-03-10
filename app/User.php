@@ -4,9 +4,10 @@ namespace App;
 
 
 use App\Models\LabRequest;
+use App\Models\Appointment;
 use App\Http\Traits\UsesUuid;
-use App\Models\ImagingRequest;
 use App\Models\Patient\Vital;
+use App\Models\ImagingRequest;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -59,5 +60,10 @@ class User extends Authenticatable
     public function imagingRequests()
     {
         return $this->hasMany(ImagingRequest::class);
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
     }
 }

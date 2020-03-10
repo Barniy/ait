@@ -10,6 +10,8 @@ use App\Patient;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PatientResource;
 use App\EmergencyContact;
+use App\Http\Resources\ImagingRequestResource;
+use App\Http\Resources\LabRequestResource;
 use App\Models\Department;
 use App\Models\PatientDepartment;
 use Symfony\Component\HttpFoundation\Response;
@@ -268,7 +270,7 @@ class PatientController extends Controller
         ]);
 
         return response()->json([
-            'data' => $patient->labRequests,
+            'data' => LabRequestResource::collection($patient->labRequests),
             'message' => 'lab request added successfully',
             'success' => true
         ]);
@@ -290,7 +292,7 @@ class PatientController extends Controller
         ]);
 
         return response()->json([
-            'data' => $patient->imagingRequests,
+            'data' =>  ImagingRequestResource::collection($patient->imagingRequests),
             'message' => 'Imaging request added successfully',
             'success' => true
         ]);

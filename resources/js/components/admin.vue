@@ -91,65 +91,39 @@ export default {
         children: [{ text: "Patients", routeTo: "/admin/Patients" }]
       },
       {
-        icon: "mdi-chevron-up",
-        "icon-alt": "mdi-account-group",
-        text: "Appointemnt",
-        model: false,
-        children: [{ text: "appoitments", routeTo: "/admin/appoitments" }]
+        icon: "mdi-calendar-multiple-check",
+        text: "Appointement",
+        routeTo: "/appointement"
       },
       {
-        icon: "mdi-chevron-up",
-        "icon-alt": "mdi-account-group",
-        text: "Laboratory",
-        model: false,
-        children: [
-          { text: "Pending", routeTo: "/admin/laboratory" },
-          { text: "Completed", routeTo: "/admin/laboratory" },
-          { text: "All", routeTo: "/admin/laboratory" }
-        ]
+        icon: "mdi-flask",
+        text: "Labratory",
+        routeTo: "/labratory/"
       },
       {
-        icon: "mdi-chevron-up",
-        "icon-alt": "mdi-account-group",
+        icon: "mdi-image-multiple",
         text: "Imaging",
-        model: false,
-        children: [
-          { text: "Pending", routeTo: "/admin/laboratory" },
-          { text: "Completed", routeTo: "/admin/laboratory" },
-          { text: "All", routeTo: "/admin/laboratory" }
-        ]
+        routeTo: "/imaging/"
       },
       {
-        icon: "mdi-chevron-up",
-        "icon-alt": "mdi-account-group",
+        icon: "mdi-pill",
         text: "Pharmacy",
-        model: false,
-        children: [
-          { text: "Billed", routeTo: "/admin/laboratory" },
-          { text: "Prepaid", routeTo: "/admin/laboratory" },
-          { text: "Dispensed", routeTo: "/admin/laboratory" }
-        ]
+        routeTo: "/pharmacy/"
       },
       {
-        icon: "mdi-chevron-up",
-        "icon-alt": "mdi-account-group",
+        icon: "mdi-bed-empty",
         text: "Ward",
-        model: false,
-        children: [{ text: "Wards", routeTo: "/admin/Ward" }]
+        routeTo: "/ward/"
       },
       {
-        icon: "mdi-chevron-up",
-        "icon-alt": "mdi-account-group",
+        icon: "mdi-cash-multiple",
         text: "Billing",
-        model: false,
-        children: [{ text: "Billings", routeTo: "/admin/Billing" }]
+        routeTo: "/billing/"
       },
       {
-        icon: "mdi-chevron-up",
-        "icon-alt": "mdi-account-group",
-        text: "report",
-        model: false,
-        children: [{ text: "Report", routeTo: "/admin/Report" }]
+        icon: "mdi-file-chart",
+        text: "Report",
+        routeTo: "/report/"
       },
       {
         icon: "mdi-chevron-up",
@@ -157,9 +131,21 @@ export default {
         text: "Users and Account",
         model: false,
         children: [
-          { text: "User", routeTo: "/admin/users" },
-          { text: "Role", routeTo: "/admin/users/roles" },
-          { text: "Permission", routeTo: "/admin/users/permissions" }
+          {
+            icon: "mdi-account",
+            text: "User",
+            routeTo: "/admin/users"
+          },
+          {
+            icon: "mdi-account-check",
+            text: "Role",
+            routeTo: "/admin/users/roles"
+          },
+          {
+            icon: "mdi-account-key",
+            text: "Permission",
+            routeTo: "/admin/users/permissions"
+          }
         ]
       },
       { icon: "mdi-settings", text: "Settings", routeTo: "/admin/settings" }

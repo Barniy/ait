@@ -11,16 +11,30 @@
             <v-card flat>
               <v-list two-line>
                 <v-list-item-group v-if="tab== '0'">
-                  <template v-for="(item, index) in lists">
-                    <v-list-item :key="item.title">
+                  <template v-for="(labRequest, index) in labRequests">
+                    <v-list-item :key="labRequest.id" @click="onLabRequestedClicked(labRequest.id)">
                       <template>
                         <v-list-item-content>
-                          <v-list-item-title v-text="item.title"></v-list-item-title>
-                          <v-list-item-subtitle class="text--primary" v-text="item.headline"></v-list-item-subtitle>
-                          <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+                          <v-list-item-subtitle>
+                            <v-chip
+                              class="ma-1"
+                              v-for="(request, index) in labRequest.LabTests"
+                              :key="index"
+                            >{{ request }}</v-chip>
+                          </v-list-item-subtitle>
+                          <v-list-item-subtitle>
+                            Requested By: Dr. {{labRequest.user.fullName}} | &nbsp;
+                            Priority:{{ labRequest.priority }} | &nbsp;
+                            Date: {{labRequest.createdAt | formatDate }}
+                          </v-list-item-subtitle>
+                          <v-list-item-subtitle>{{ labRequest.description }}</v-list-item-subtitle>
                         </v-list-item-content>
                         <v-list-item-action>
-                          <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
+                          <v-list-item-action-text>
+                            {{
+                            labRequest.status== 'CREATED'?'Unpaid': labRequest.status
+                            }}
+                          </v-list-item-action-text>
                           <v-icon>mdi-circle-edit-outline</v-icon>
                         </v-list-item-action>
                       </template>
@@ -68,7 +82,9 @@
         </v-tabs-items>
       </v-card-text>
       <v-card-text>
-        <LabRequest v-if="tab== '0'" v-bind:id="id"></LabRequest>
+        <LabRequest v-if="tab== '0'"
+        v-bind:id="id"
+        v-bind:labRequest="selectedLabRequest"></LabRequest>
         <ImagingRequest
           v-if="tab== '1'"
           v-bind:id="id"
@@ -92,7 +108,9 @@ export default {
     return {
       tab: null,
       imagingRequests: [],
+      labRequests: [],
       selectedImagingRequest: null,
+      selectedLabRequest: null,
       lists: [
         {
           action: "pending",
@@ -161,6 +179,16 @@ export default {
     };
   },
   methods: {
+    getLabRequest() {
+      axios
+        .get("/api/patientLabRequests", {
+          params: { patientId: this.id }
+        })
+        .then(response => {
+          this.labRequests = response.data.data;
+        })
+        .catch(error => {});
+    },
     getImagingRequest() {
       axios
         .get("/api/patientImagingRequests", {
@@ -175,10 +203,16 @@ export default {
       this.selectedImagingRequest = this.imagingRequests.filter(
         imagingRequest => imagingRequest.id == id
       );
+    },
+    onLabRequestedClicked(id) {
+      this.selectedLabRequest = this.labRequests.filter(
+        labRequest => labRequest.id == id
+      );
     }
   },
   created() {
     this.getImagingRequest();
+    this.getLabRequest();
   }
 };
 </script>
