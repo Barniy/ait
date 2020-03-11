@@ -43,8 +43,20 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field v-model="editedItem.height" label="Height"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="6">
                       <v-text-field v-model="editedItem.weight" label="Weight"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                     <v-select
+                    :items="departments"
+                    filled
+                    chips
+                    v-model="editedItem.department"
+                    item-text="name"
+                    item-value="id"
+                    label="department"
+                    multiple
+                  ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -73,6 +85,7 @@ export default {
   props: ["id"],
   data: () => ({
     tableData: [],
+    departments:[],
     pagination: { totalItems: null, itemsPerPage: null, page: null },
     search: "",
     loading: true,
@@ -87,6 +100,7 @@ export default {
       height: "",
       weight: "",
       patientId: "",
+      department:'',
       userId: "2"
     },
     defaultItem: {
@@ -96,7 +110,8 @@ export default {
       temperature: "",
       oxygenSaturation: "",
       height: "",
-      weight: ""
+      weight: "",
+       department:'',
     },
     headers: [
       {
@@ -173,11 +188,21 @@ export default {
         })
         .catch(err => {});
       this.close();
+    },
+    getDepartments(){
+        axios.get('/api/departments')
+        .then(response => {
+            this.departments = response.data.data;
+            console.log(this.department)
+        })
+        .catch(function (error) {
+        })
     }
   },
 
   created() {
     this.initialized();
+    this.getDepartments();
   }
 };
 </script>

@@ -98,12 +98,12 @@ export default {
       {
         icon: "mdi-flask",
         text: "Labratory",
-        routeTo: "/labratory/"
+        routeTo: "/admin/labRequests"
       },
       {
         icon: "mdi-image-multiple",
         text: "Imaging",
-        routeTo: "/imaging/"
+        routeTo: "/admin/imagingRequests"
       },
       {
         icon: "mdi-pill",

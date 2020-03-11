@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Patient;
+use App\Models\LabRequest;
 use Illuminate\Http\Request;
 use App\Http\Resources\LabRequestResource;
+use App\Http\Resources\LabRequestsCollection;
 
 class LabRequestController extends Controller
 {
@@ -13,9 +15,18 @@ class LabRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->input('status') == 'ALL') {
+            $labRequest = LabRequest::whereIn(
+                'status',
+                ['PENDING', 'COMPLETED']
+            )->orderBy('created_at')->get();
+        } else {
+
+            $labRequest = LabRequest::where('status', $request->input('status'))->orderBy('created_at')->get();
+        }
+        return  LabRequestsCollection::collection($labRequest);
     }
 
     /**

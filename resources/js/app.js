@@ -41,6 +41,8 @@ import Permissions from './views/users/Permissions';
 import Patients from './views/patients/patients';
 import PatientDetail from './views/patients/PatientDetail';
 import Appointment from './views/appointment/appointment';
+import LabRequest from './views/laboratory/labRequest';
+import ImagingRequest from './views/Imaging/ImagingRequest';
 const routes = [{
         path: "/admin/",
         component: Dashboard
@@ -72,6 +74,16 @@ const routes = [{
     {
         path: '/admin/patient/:id',
         component: PatientDetail,
+        props: true
+    },
+    {
+        path: '/admin/labRequests',
+        component: LabRequest,
+        props: true
+    },
+    {
+        path: '/admin/imagingRequests',
+        component: ImagingRequest,
         props: true
     }
 ];

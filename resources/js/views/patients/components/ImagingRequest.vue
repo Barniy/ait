@@ -188,7 +188,6 @@ export default {
     getSelctedPatientConditions(condition) {
       this.editedAttributeConditions.forEach(patientCondition => {
         condition.forEach(condition => {
-          console.log(patientCondition.key, condition);
           if (patientCondition.key == condition) {
             return (patientCondition.isChecked = true);
           }

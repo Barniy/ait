@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class PatientCollection extends Resource
@@ -25,8 +26,6 @@ class PatientCollection extends Resource
             'dateOfBirth' => $this->date_of_birth,
             'language' => $this->language,
             'religion' => $this->religion,
-            'address' => new AddressResource($this->address),
-            'emergencyContact' => new EmergencyContactResource($this->emergencyContact)
         ];
     }
 }

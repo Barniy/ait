@@ -22,6 +22,7 @@ class AppointmentTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->date('date');
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

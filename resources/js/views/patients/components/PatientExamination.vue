@@ -84,6 +84,7 @@
       <v-card-text>
         <LabRequest v-if="tab== '0'"
         v-bind:id="id"
+         v-bind:showAddButton="true"
         v-bind:labRequest="selectedLabRequest"></LabRequest>
         <ImagingRequest
           v-if="tab== '1'"

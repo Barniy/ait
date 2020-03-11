@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="labRequestDialog" transition="dialog-bottom-transition">
-      <template v-slot:activator="{ on }">
+    <v-dialog  v-model="labRequestDialog" transition="dialog-bottom-transition">
+      <template v-slot:activator="{ on }" v-if="showAddButton">
         <v-btn absolute dark fab top right color="primary" v-on="on">
           <v-icon>mdi-plus</v-icon>
         </v-btn>
@@ -71,7 +71,7 @@
 import Auth from "../../../auth";
 export default {
   name: "LabRequest",
-  props: ["id", "labRequest"],
+  props: ["id", "labRequest", "showAddButton"],
   data() {
     return {
       labRequestDialog: false,
@@ -96,7 +96,6 @@ export default {
   },
   watch: {
     labRequest: function() {
-      console.log("fire");
       this.lab = Object.assign({}, ...this.labRequest);
 
       this.labRequestDialog = true;

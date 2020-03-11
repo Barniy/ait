@@ -14,7 +14,6 @@ class CreateDepartmentPatientTable extends Migration
     public function up()
     {
         Schema::create('department_patient', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->uuid('patient_id');
             $table->unsignedBigInteger('user_id');
             $table->uuid('department_id');

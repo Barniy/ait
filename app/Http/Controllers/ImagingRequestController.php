@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ImagingRequestResource;
 use App\Patient;
 use Illuminate\Http\Request;
+use App\Models\ImagingRequest;
+use App\Http\Resources\ImagingRequestResource;
+use App\Http\Resources\ImagingRequestsCollection;
 
 class ImagingRequestController extends Controller
 {
@@ -13,9 +15,18 @@ class ImagingRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->input('status') == 'ALL') {
+            $labRequest = ImagingRequest::whereIn(
+                'status',
+                ['PENDING', 'COMPLETED']
+            )->orderBy('created_at')->get();
+        } else {
+
+            $labRequest = ImagingRequest::where('status', $request->input('status'))->orderBy('created_at')->get();
+        }
+        return  ImagingRequestsCollection::collection($labRequest);
     }
 
     /**

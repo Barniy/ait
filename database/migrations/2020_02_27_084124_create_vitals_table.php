@@ -26,6 +26,8 @@ class CreateVitalsTable extends Migration
             $table->string('oxygen_saturation')->nullable();
             $table->string('weight')->nullable();
             $table->string('height')->nullable();
+            $table->string('type')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

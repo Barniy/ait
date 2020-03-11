@@ -14,7 +14,6 @@
 */
 
 
-
 Route::resource('users', 'Admin\UserController');
 Route::resource('roles', 'Admin\RoleController');
 Route::resource('permissions', 'Admin\PermissionController');
@@ -29,3 +28,7 @@ Route::resource('attributeConditions', 'AttributeConditionController');
 Route::resource('appointments', 'AppointmentController');
 Route::get('patientImagingRequests', 'ImagingRequestController@show');
 Route::get('patientLabRequests', 'LabRequestController@show');
+Route::resource('labRequests', 'LabRequestController');
+Route::post('labRequests', 'LabRequestController@index');
+Route::post('ImagingRequests', 'ImagingRequestController@index');
+Route::resource('departments', 'DepartmentController');

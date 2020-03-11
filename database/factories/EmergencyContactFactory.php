@@ -11,6 +11,5 @@ $factory->define(EmergencyContact::class, function (Faker $faker) {
         'first_name' => $faker->name,
         'middle_name' => $faker->name,
         'last_name' => $faker->name,
-        'gender' => $faker->randomElement(['Female', 'Male']),
     ];
 });
