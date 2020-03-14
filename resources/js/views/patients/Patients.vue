@@ -12,7 +12,7 @@
           class="hidden-sm-and-down"
         />
         <v-spacer></v-spacer>
-        <v-btn @click="onNewPatinet()" class="text-transform-none">
+        <v-btn @click="onNewPatinet(true)" class="text-transform-none">
           <v-icon dark left>mdi-plus</v-icon>Patinet
         </v-btn>
       </v-toolbar>
@@ -20,6 +20,7 @@
         :headers="headers"
         :items="tableData"
         item-key="id"
+        :search="search"
         class="elevation-1"
         loading-text="Loading... Please wait"
         :loading="loading"
@@ -215,6 +216,7 @@
   </v-container>
 </template>
 <script>
+import ApiService from "../../services/ApiService.js";
 import Appointement from "../appointment/appointment";
 export default {
   name: "Patients",
@@ -234,6 +236,7 @@ export default {
       e1: 1,
       search: "",
       loading: true,
+      
       patient: {
         medicalRecordNumber: "",
         firstName: "",
@@ -293,16 +296,12 @@ export default {
   },
   methods: {
     getLanguagess() {
-      axios
-        .get("/api/languages")
+      ApiService.executeQueryGet("languages")
         .then(result => (this.languages = result.data.data))
         .catch(err => {});
     },
     patientDetail(event) {
       this.$router.push("/admin/patient/" + event.id);
-    },
-    initialized() {
-      this.getPatients();
     },
     totalItems() {
       return this.pagination.totalItems;
@@ -311,20 +310,16 @@ export default {
       return this.pagination.rowsPerPageItems;
     },
     getPatients(page) {
-      axios
-        .get("/api/patients?page=" + this.pagination.page)
-        .then(result => {
-          this.tableData = result.data.data;
-          this.pagination.page = result.data.meta.current_page;
-          this.pagination.itemsPerPage = result.data.meta.per_page;
-          this.pagination.totalItems = result.data.meta.total;
+      ApiService.executeQueryGet("patients?page=" + this.pagination.page)
+        .then(response => {
+          console.log(response.data.data);
+          this.tableData = response.data.data;
+          this.pagination.page = response.data.meta.current_page;
+          this.pagination.itemsPerPage = response.data.meta.per_page;
+          this.pagination.totalItems = response.data.meta.total;
           this.loading = false;
         })
         .catch(err => {});
-    },
-    onNewPatinet() {
-      this.dialog = true;
-      this.editedItem = Object.assign({}, this.defaultItem);
     },
     onSaveNewPatient() {
       if (!this.interpreterRequired) {
@@ -332,10 +327,12 @@ export default {
           item => item.name == "Amharic"
         );
       }
-      axios
-        .post("/api/patients", this.patient)
-        .then(response => console.log(response))
+      ApiService.executeCommandPost("patients", this.patient)
+        .then(response => this.onNewPatinet(false))
         .catch(error => {});
+    },
+    onNewPatinet(dialog) {
+      this.dialog = dialog;
     },
     onCalendarClicked(item) {
       this.appointmentModal = !this.appointmentModal;
@@ -343,15 +340,14 @@ export default {
     },
     addAppointment(appointmen) {
       console.log(appointmen);
-      axios
-        .post("/api/appointments", {
-          patientId: this.selectedPatient.id,
-          appointmentTitle: appointmen.appointementTitle,
-          appointmentDescription: appointmen.appointementDescription,
-          appointmentDate: appointmen.appointementDate,
-          userId: this.loggedIn.user.id
-        })
-        .then(function(response) {})
+      ApiService.executeCommandPost("appointments", {
+        patientId: this.selectedPatient.id,
+        appointmentTitle: appointmen.appointementTitle,
+        appointmentDescription: appointmen.appointementDescription,
+        appointmentDate: appointmen.appointementDate,
+        userId: this.loggedIn.user.id
+      })
+        .then(response => this.onCalendarClicked(null))
         .catch(function(error) {});
     }
   },
@@ -363,13 +359,12 @@ export default {
   watch: {
     pagination: {
       handler() {
-        this.getPatients();
+        this.getPatients(1);
       },
       deep: true
     }
   },
   created() {
-    this.initialized();
     this.getLanguagess();
   }
 };

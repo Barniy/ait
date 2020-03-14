@@ -70,6 +70,10 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import store from "../store";
+import NProgress from "nprogress";
+NProgress.configure({ easing: "ease", speed: 500, showSpinner: false });
 export default {
   name: "Admin",
   props: {
@@ -108,22 +112,22 @@ export default {
       {
         icon: "mdi-pill",
         text: "Pharmacy",
-        routeTo: "/pharmacy/"
+        routeTo: "/admin/pharmacy/"
       },
       {
         icon: "mdi-bed-empty",
         text: "Ward",
-        routeTo: "/ward/"
+        routeTo: "/admin/ward/"
       },
       {
         icon: "mdi-cash-multiple",
         text: "Billing",
-        routeTo: "/billing/"
+        routeTo: "/admin/billing/"
       },
       {
         icon: "mdi-file-chart",
         text: "Report",
-        routeTo: "/report/"
+        routeTo: "/admin/report/"
       },
       {
         icon: "mdi-chevron-up",
@@ -150,6 +154,21 @@ export default {
       },
       { icon: "mdi-settings", text: "Settings", routeTo: "/admin/settings" }
     ]
-  })
+  }),
+  created() {
+    this.$store.watch(
+      state => state.loading.loading,
+      (newVal, oldVal) => {
+        if (newVal === 0) return NProgress.done();
+        if (oldVal === 0) return NProgress.start();
+      }
+    );
+  }
 };
 </script>
+<style>
+#nprogress .bar {
+  background: red !important;
+  height: 4px;
+}
+</style>

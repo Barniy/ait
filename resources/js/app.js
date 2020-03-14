@@ -12,14 +12,14 @@ import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
 import moment from 'moment';
 import '@mdi/font/css/materialdesignicons.css';
-
-
+require("vue-awesome-notifications/dist/styles/style.css");
+import 'nprogress/nprogress.css';
+import store from './store/index';
 
 const vuetifyOptions = {};
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
-
 import 'vuetify/dist/vuetify.min.css';
 import Auth from './auth';
 
@@ -43,49 +43,55 @@ import PatientDetail from './views/patients/PatientDetail';
 import Appointment from './views/appointment/appointment';
 import LabRequest from './views/laboratory/labRequest';
 import ImagingRequest from './views/Imaging/ImagingRequest';
+import Ward from './views/ward/ward';
 const routes = [{
-        path: "/admin/",
-        component: Dashboard
-    },
-    {
-        path: '/admin/users',
-        component: Users
-    },
-    {
-        path: '/admin/users/roles',
-        component: Role
-    },
-    {
-        path: '/admin/users/permissions',
-        component: Permissions
-    },
-    {
-        path: '/admin/settings',
-        component: Settings
-    },
-    {
-        path: '/admin/patients',
-        component: Patients
-    },
-    {
-        path: '/admin/appointment',
-        component: Appointment
-    },
-    {
-        path: '/admin/patient/:id',
-        component: PatientDetail,
-        props: true
-    },
-    {
-        path: '/admin/labRequests',
-        component: LabRequest,
-        props: true
-    },
-    {
-        path: '/admin/imagingRequests',
-        component: ImagingRequest,
-        props: true
-    }
+    path: "/admin/",
+    component: Dashboard
+},
+{
+    path: '/admin/users',
+    component: Users
+},
+{
+    path: '/admin/users/roles',
+    component: Role
+},
+{
+    path: '/admin/users/permissions',
+    component: Permissions
+},
+{
+    path: '/admin/settings',
+    component: Settings
+},
+{
+    path: '/admin/patients',
+    component: Patients
+},
+{
+    path: '/admin/appointment',
+    component: Appointment
+},
+{
+    path: '/admin/patient/:id',
+    component: PatientDetail,
+    props: true
+},
+{
+    path: '/admin/labRequests',
+    component: LabRequest,
+    props: true
+},
+{
+    path: '/admin/imagingRequests',
+    component: ImagingRequest,
+    props: true
+},
+{
+    path: '/admin/ward',
+    component: Ward,
+    props: true
+}
 ];
 
 const router = new VueRouter({
@@ -99,5 +105,6 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     router,
+    store,
     vuetify: new Vuetify(vuetifyOptions)
 });
