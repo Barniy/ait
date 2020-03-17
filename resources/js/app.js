@@ -44,6 +44,7 @@ import Appointment from './views/appointment/appointment';
 import LabRequest from './views/laboratory/labRequest';
 import ImagingRequest from './views/Imaging/ImagingRequest';
 import Ward from './views/ward/ward';
+import Billing from './views/billing/billing';
 const routes = [{
     path: "/admin/",
     component: Dashboard
@@ -90,6 +91,11 @@ const routes = [{
 {
     path: '/admin/ward',
     component: Ward,
+    props: true
+},
+{
+    path: '/admin/billing',
+    component: Billing,
     props: true
 }
 ];

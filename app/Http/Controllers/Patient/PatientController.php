@@ -14,6 +14,7 @@ use App\Http\Resources\ImagingRequestResource;
 use App\Http\Resources\LabRequestResource;
 use App\Models\Department;
 use App\Models\PatientDepartment;
+use App\Queue;
 use Symfony\Component\HttpFoundation\Response;
 
 class PatientController extends Controller
@@ -256,10 +257,10 @@ class PatientController extends Controller
 
     public function addLabRequest(Request $request)
     {
-
-
+        // find patient
         $patient = Patient::findOrFail($request->patientId);
 
+        // add to lab request 
         $patient->labRequests()->create([
             'specimen_type' => $request->specimentType,
             'lab_tests' => $request->labTests,
@@ -269,9 +270,17 @@ class PatientController extends Controller
             'status' => $request->status,
         ]);
 
+        // add to payment queue
+        $queue = new Queue;
+        $queue->patient_id = $request->patientId;
+        $queue->user_id = $request->userId;
+        $queue->type = "LABREQUEST";
+        $queue->save();
+
+
         return response()->json([
             'data' => LabRequestResource::collection($patient->labRequests),
-            'message' => 'lab request added successfully',
+            'message' => 'lab request added successfully and added to Queue',
             'success' => true
         ]);
     }
@@ -279,8 +288,10 @@ class PatientController extends Controller
     public function addImagingRequest(Request $request)
     {
 
+        // find patient 
         $patient = Patient::findOrFail($request->input('patientId'));
 
+        // add imaging request to Imaging 
         $patient->imagingRequests()->create([
             'provisional_diagnosis' => $request->input('provisionalDiagnosis'),
             'clinical_information' => $request->input('clinicalInformation'),
@@ -291,9 +302,16 @@ class PatientController extends Controller
             'status' => $request->input('status')
         ]);
 
+        // add to payment queue
+        $queue = new Queue;
+        $queue->patient_id = $request->patientId;
+        $queue->user_id = $request->userId;
+        $queue->type = "IMAGINGREQUEST";
+        $queue->save();
+
         return response()->json([
             'data' =>  ImagingRequestResource::collection($patient->imagingRequests),
-            'message' => 'Imaging request added successfully',
+            'message' => 'Imaging request added successfully and added to Queue',
             'success' => true
         ]);
     }

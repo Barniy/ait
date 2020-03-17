@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog  v-model="labRequestDialog" transition="dialog-bottom-transition">
+    <v-dialog v-model="labRequestDialog" transition="dialog-bottom-transition">
       <template v-slot:activator="{ on }" v-if="showAddButton">
         <v-btn absolute dark fab top right color="primary" v-on="on">
           <v-icon>mdi-plus</v-icon>
@@ -15,16 +15,16 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="6">
-                  <v-autocomplete
-                    :items="lab.specimenType"
+                  <v-select
+                    :items="specimenType"
                     filled
-                    v-model="specimenTest"
                     chips
+                    v-model="specimenTest"
                     item-text="description"
                     item-value="key"
                     label="Specimen Type"
                     multiple
-                  ></v-autocomplete>
+                  ></v-select>
                 </v-col>
                 <v-col cols="12" sm="6" justify>
                   <header>Priority</header>
@@ -69,6 +69,7 @@
 
 <script>
 import Auth from "../../../auth";
+import ApiService from "../../../services/ApiService";
 export default {
   name: "LabRequest",
   props: ["id", "labRequest", "showAddButton"],
@@ -109,26 +110,24 @@ export default {
   methods: {
     remove(item) {},
     onSaveLabRequest() {
-      axios
-        .post("/api/patients/addLabRequest", {
-          patientId: this.id,
-          specimentType: this.specimenTest,
-          labTests: this.labTests,
-          priority: this.priority,
-          userId: this.loggedIn.user.id,
-          description: this.note,
-          status: "CREATED"
-        })
+      ApiService.executeCommandPost("/patients/addLabRequest", {
+        patientId: this.id,
+        specimentType: this.specimenTest,
+        labTests: this.labTests,
+        priority: this.priority,
+        userId: this.loggedIn.user.id,
+        description: this.note,
+        status: "CREATED"
+      })
         .then(function(response) {})
         .catch(function(error) {});
     },
     getLookupLabTestAttributes() {
-      axios
-        .get("/api/attributeExamination/", {
-          params: {
-            type: "LABTEST"
-          }
-        })
+      ApiService.executeQueryGet("/attributeExamination/", {
+        params: {
+          type: "LABTEST"
+        }
+      })
         .then(result => {
           this.labType = result.data.data;
         })
@@ -137,12 +136,11 @@ export default {
         });
     },
     getLookupSpecimentAttributes() {
-      axios
-        .get("/api/attributeExamination/", {
-          params: {
-            type: "Specimen"
-          }
-        })
+      ApiService.executeQueryGet("/attributeExamination/", {
+        params: {
+          type: "Specimen"
+        }
+      })
         .then(result => {
           this.specimenType = result.data.data;
         })

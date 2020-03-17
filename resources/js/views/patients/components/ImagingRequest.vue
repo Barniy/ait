@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import ApiService from "../../../services/ApiService";
 export default {
   name: "ImagingRequest",
   props: ["id", "imagingRequest"],
@@ -112,12 +113,11 @@ export default {
   },
   methods: {
     getLookupAttributeImagingTests() {
-      axios
-        .get("/api/attributeExamination/", {
-          params: {
-            type: "imaging"
-          }
-        })
+      ApiService.executeQueryGet("/attributeExamination/", {
+        params: {
+          type: "imaging"
+        }
+      })
         .then(result => {
           this.editedAttributeImagingTest = result.data.data;
         })
@@ -126,8 +126,7 @@ export default {
         });
     },
     getLookupAttributeConditions() {
-      axios
-        .get("/api/attributeConditions")
+      ApiService.executeQueryGet("/attributeConditions")
         .then(result => {
           this.editedAttributeConditions = result.data.data;
         })
@@ -149,17 +148,16 @@ export default {
         }
       });
 
-      axios
-        .post("/api/patients/addImagingRequest", {
-          patientId: this.id,
-          userId: this.loggedIn.user.id,
-          provisionalDiagnosis: this.imaging.provisionalDiagnosis,
-          clinicalInformation: this.imaging.clinicalInformation,
-          patientConditions: patientConditions,
-          examinationRequested: imagingTests,
-          description: this.imaging.description,
-          status: "CREATED"
-        })
+      ApiService.executeCommandPost("/patients/addImagingRequest", {
+        patientId: this.id,
+        userId: this.loggedIn.user.id,
+        provisionalDiagnosis: this.imaging.provisionalDiagnosis,
+        clinicalInformation: this.imaging.clinicalInformation,
+        patientConditions: patientConditions,
+        examinationRequested: imagingTests,
+        description: this.imaging.description,
+        status: "CREATED"
+      })
         .then(res => {
           console.log(res);
         })

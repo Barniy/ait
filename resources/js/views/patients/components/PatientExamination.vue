@@ -82,10 +82,12 @@
         </v-tabs-items>
       </v-card-text>
       <v-card-text>
-        <LabRequest v-if="tab== '0'"
-        v-bind:id="id"
-         v-bind:showAddButton="true"
-        v-bind:labRequest="selectedLabRequest"></LabRequest>
+        <LabRequest
+          v-if="tab== '0'"
+          v-bind:id="id"
+          v-bind:showAddButton="true"
+          v-bind:labRequest="selectedLabRequest"
+        ></LabRequest>
         <ImagingRequest
           v-if="tab== '1'"
           v-bind:id="id"
@@ -96,6 +98,7 @@
   </v-container>
 </template>
 <script>
+import ApiService from "../../../services/ApiService";
 import LabRequest from "./LabRequest.vue";
 import ImagingRequest from "./ImagingRequest.vue";
 export default {
@@ -112,67 +115,6 @@ export default {
       labRequests: [],
       selectedImagingRequest: null,
       selectedLabRequest: null,
-      lists: [
-        {
-          action: "pending",
-          headline: "Brunch this weekend?",
-          title: " Ali Connors",
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          action: "pending",
-          headline: "Summer BBQ",
-          title: "me, Scrott, Jennifer",
-          subtitle: "Wish I could come, but I'm out of town this weekend."
-        },
-        {
-          action: "pending",
-          headline: "Oui oui",
-          title: "Sandra Adams",
-          subtitle: "Do you have Paris recommendations? Have you ever been?"
-        },
-        {
-          action: "completed",
-          headline: "Birthday gift",
-          title: "Trevor Hansen",
-          subtitle:
-            "Have any ideas about what we should get Heidi for her birthday?"
-        },
-        {
-          action: "completed",
-          headline: "Recipe to try",
-          title: "Britta Holt",
-          subtitle:
-            "We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
-        },
-        {
-          action: "pending",
-          headline: "Summer BBQ",
-          title: "me, Scrott, Jennifer gh",
-          subtitle: "Wish I could come, but I'm out of town this weekend."
-        },
-        {
-          action: "pending",
-          headline: "Oui oui",
-          title: "Sandra Adams sfd",
-          subtitle: "Do you have Paris recommendations? Have you ever been?"
-        },
-        {
-          action: "completed",
-          headline: "Birthday gift",
-          title: "Trevor Hansen fsg",
-          subtitle:
-            "Have any ideas about what we should get Heidi for her birthday?"
-        },
-        {
-          action: "completed",
-          headline: "Recipe to try",
-          title: "Britta Holt fg",
-          subtitle:
-            "We should eat this: Grate, Squash, Corn, and tomatillo Tacos."
-        }
-      ],
       items: [
         { tab: "Laboratory", content: "Laboratory" },
         { tab: "Imaging", content: "Imaging" }
@@ -181,20 +123,18 @@ export default {
   },
   methods: {
     getLabRequest() {
-      axios
-        .get("/api/patientLabRequests", {
-          params: { patientId: this.id }
-        })
+      ApiService.executeQueryPost("/patientLabRequests", {
+        patientId: this.id
+      })
         .then(response => {
           this.labRequests = response.data.data;
         })
         .catch(error => {});
     },
     getImagingRequest() {
-      axios
-        .get("/api/patientImagingRequests", {
-          params: { patientId: this.id }
-        })
+      ApiService.executeQueryPost("/patientImagingRequests", {
+        patientId: this.id
+      })
         .then(response => {
           this.imagingRequests = response.data.data;
         })

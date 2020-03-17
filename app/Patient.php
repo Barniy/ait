@@ -74,4 +74,9 @@ class Patient extends Model
     {
         return $this->hasMany(Appointment::class);
     }
+
+    public function queus()
+    {
+        return $this->belongsTo(Queue::class);
+    }
 }
