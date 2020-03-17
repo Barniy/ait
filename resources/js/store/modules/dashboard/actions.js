@@ -9,9 +9,6 @@ export const fetchTempPatients = ({ commit, dispatch }, payload) => {
 
 export const addTempPatient = ({ commit, dispatch }, payload) => {
     return ApiService.executeCommandPost("tempPatients", payload)
-        .then(response => {
-            this.$store.commit(types.ADD_TEMP_PATIENT, response.data.data);
-
-        })
+        .then(response => commit(types.ADD_TEMP_PATIENT, response.data.data))
         .catch(error => { });
 };

@@ -55,7 +55,7 @@ import tempPatientRegister from "./components/tempPatientRegister";
 // vuex
 import { mapActions, mapState } from "vuex";
 export default {
-  name: "FrontDeskDashboard",
+  name: "NurseDashboard",
   components: { tempPatientRegister },
   data() {
     return {
