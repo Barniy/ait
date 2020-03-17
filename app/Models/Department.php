@@ -14,6 +14,11 @@ class Department extends Model
 
     public function patients()
     {
-        return $this->belongsToMany(Patient::class)->withTimestamps();
+        return $this->hasMany(Patient::class)->withTimestamps();
+    }
+
+    public function tempPatients()
+    {
+        return $this->hasMany(TempPatient::class);
     }
 }

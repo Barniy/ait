@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TempPatientResource;
+use App\Models\TempPatient;
 use Illuminate\Http\Request;
 
 class TempPatientController extends Controller
@@ -13,7 +15,7 @@ class TempPatientController extends Controller
      */
     public function index()
     {
-        //
+        return  TempPatientResource::collection(TempPatient::all()->sortBy('created_at'));
     }
 
     /**
@@ -23,7 +25,7 @@ class TempPatientController extends Controller
      */
     public function create()
     {
-        //
+      
     }
 
     /**
@@ -34,7 +36,19 @@ class TempPatientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tempPatient = new  TempPatient;
+        $tempPatient->first_name = $request->input('firstName');
+        $tempPatient->middle_name = $request->input('middleName');
+        $tempPatient->last_name = $request->input('lastName');
+        $tempPatient->department_id = $request->input('departmentId');
+        $tempPatient->user_id = $request->input('userId');
+        $tempPatient->save();
+
+        return response()->json([
+            'data' => new TempPatientResource($tempPatient),
+            'message' => 'patient added to payment queue',
+            'success' => true
+        ]);
     }
 
     /**

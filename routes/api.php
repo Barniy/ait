@@ -32,3 +32,4 @@ Route::resource('labRequests', 'LabRequestController');
 Route::post('labRequests', 'LabRequestController@index');
 Route::post('ImagingRequests', 'ImagingRequestController@index');
 Route::resource('departments', 'DepartmentController');
+Route::resource('tempPatients', 'TempPatientController');
