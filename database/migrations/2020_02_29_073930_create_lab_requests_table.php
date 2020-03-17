@@ -14,7 +14,7 @@ class CreateLabRequestsTable extends Migration
     public function up()
     {
         Schema::create('lab_requests', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->primary();
             $table->uuid('patient_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');

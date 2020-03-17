@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\User;
 use App\Patient;
+use App\Http\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class LabRequest extends Model
 {
+    use UsesUuid;
     protected $fillable = [];
     protected $guarded = [];
     protected $casts = [

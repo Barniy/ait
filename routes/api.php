@@ -23,7 +23,7 @@ Route::post('patients/addLabRequest', 'Patient\PatientController@addLabRequest')
 Route::post('patients/addImagingRequest', 'Patient\PatientController@addImagingRequest');
 Route::resource('vitals', 'VitalController');
 Route::resource('languages', 'LanguageController');
-Route::resource('attributeExamination', 'AttributeExaminationController');
+Route::post('attributeExamination', 'AttributeExaminationController@index');
 Route::resource('attributeConditions', 'AttributeConditionController');
 Route::resource('appointments', 'AppointmentController');
 Route::post('patientImagingRequests', 'ImagingRequestController@show');

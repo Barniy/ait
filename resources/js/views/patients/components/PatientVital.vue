@@ -46,18 +46,7 @@
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field v-model="editedItem.weight" label="Weight"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
-                     <v-select
-                    :items="departments"
-                    filled
-                    chips
-                    v-model="editedItem.department"
-                    item-text="name"
-                    item-value="id"
-                    label="department"
-                    multiple
-                  ></v-select>
-                    </v-col>
+                    
                   </v-row>
                 </v-container>
               </v-card-text>

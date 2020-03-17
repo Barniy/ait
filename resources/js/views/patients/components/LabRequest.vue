@@ -123,10 +123,8 @@ export default {
         .catch(function(error) {});
     },
     getLookupLabTestAttributes() {
-      ApiService.executeQueryGet("/attributeExamination/", {
-        params: {
-          type: "LABTEST"
-        }
+      ApiService.executeQueryPost("/attributeExamination/", {
+        type: "LABTEST"
       })
         .then(result => {
           this.labType = result.data.data;
@@ -136,10 +134,8 @@ export default {
         });
     },
     getLookupSpecimentAttributes() {
-      ApiService.executeQueryGet("/attributeExamination/", {
-        params: {
-          type: "Specimen"
-        }
+      ApiService.executeQueryPost("/attributeExamination/", {
+        type: "Specimen"
       })
         .then(result => {
           this.specimenType = result.data.data;

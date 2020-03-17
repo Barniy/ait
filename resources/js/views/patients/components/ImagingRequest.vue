@@ -113,10 +113,8 @@ export default {
   },
   methods: {
     getLookupAttributeImagingTests() {
-      ApiService.executeQueryGet("/attributeExamination/", {
-        params: {
-          type: "imaging"
-        }
+      ApiService.executeQueryPost("/attributeExamination/", {
+        type: "imaging"
       })
         .then(result => {
           this.editedAttributeImagingTest = result.data.data;
