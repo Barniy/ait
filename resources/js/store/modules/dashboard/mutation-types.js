@@ -1,0 +1,2 @@
+export const SET_TEMP_PATIENTS = 'SET_TEMP_PATIENTS';
+export const Temp_PATIENT_MODAL = 'Temp_PATIENT_MODAL';

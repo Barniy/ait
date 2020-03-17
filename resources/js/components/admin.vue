@@ -83,9 +83,15 @@ export default {
     drawer: null,
     items: [
       {
-        icon: "mdi-view-dashboard",
+        icon: "mdi-chevron-up",
+        "icon-alt": "mdi-view-dashboard",
         text: "Dashboard",
-        routeTo: "/admin/"
+        model: false,
+        children: [
+          { text: "Deafult Dashboard", routeTo: "/admin/" },
+          { text: "FrontDesk Dashboard", routeTo: "/admin/front-desk/" },
+          { text: "nurse Dashboard", routeTo: "/admin/nurse-dashboard/" }
+        ]
       },
       {
         icon: "mdi-chevron-up",

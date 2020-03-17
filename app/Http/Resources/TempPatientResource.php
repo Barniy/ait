@@ -19,10 +19,11 @@ class TempPatientResource extends JsonResource
             'firstName' => $this->first_name,
             'middleName' => $this->middle_name,
             'lastName' => $this->last_name,
-            'createAt' => $this->created_at,
-            'updatedAt' => $this->updated_at,
+            'fullName' => $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name,
+            'created_at' => $this->created_at->diffForHumans(),
+            'updatedAt' => $this->updated_at->diffForHumans(),
             'department' => new DepartmentResource($this->department),
-            'nurse' => new UserResource($this->user),
+            'user' => new UserResource($this->user),
         ];
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <v-toolbar>
       <v-btn-toggle v-model="toggle_exclusive">
         <v-btn @click="onTabClicked(true, false,false,false)">Information</v-btn>
@@ -10,12 +10,13 @@
         <v-btn @click="onTabClicked(false,false,false,false,false)">Payment</v-btn>
       </v-btn-toggle>
     </v-toolbar>
+
     <PatientInformation v-if="onPatientInformation" v-bind:id="id"></PatientInformation>
     <PatientVital v-if="onPatientVital" v-bind:id="id"></PatientVital>
     <PatientExamination v-if="onPatientExamination" v-bind:id="id"></PatientExamination>
     <PatientPayment v-if="onPatientPayment"></PatientPayment>
     <Appointment v-if="onAppointment" v-bind:id="id"></Appointment>
-  </div>
+  </v-container>
 </template>
 
 <script>

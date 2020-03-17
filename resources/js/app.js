@@ -45,7 +45,17 @@ import LabRequest from './views/laboratory/labRequest';
 import ImagingRequest from './views/Imaging/ImagingRequest';
 import Ward from './views/ward/ward';
 import Billing from './views/billing/billing';
+import FrontDeskDashboard from './views/dashboard/FrontDeskDashboard';
+import NurseDeskDashboard from './views/dashboard/nurseDashboard';
 const routes = [{
+    path: "/admin/front-desk",
+    component: FrontDeskDashboard
+},
+{
+    path: '/admin/nurse-dashboard/',
+    component: NurseDeskDashboard
+},
+{
     path: "/admin/",
     component: Dashboard
 },
