@@ -10,9 +10,12 @@ use App\Models\Appointment;
 use App\Http\Traits\UsesUuid;
 use App\Models\Patient\Vital;
 use App\Models\ImagingRequest;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
 use Illuminate\Database\Eloquent\Model;
 
-class Patient extends Model
+class Patient extends Model implements Searchable
+
 {
     use UsesUuid;
 
@@ -78,5 +81,21 @@ class Patient extends Model
     public function queus()
     {
         return $this->belongsTo(Queue::class);
+    }
+
+    public function getSearchResult(): SearchResult
+    {
+
+
+        return new \Spatie\Searchable\SearchResult(
+            $this,
+            $this->first_name . ' ' .
+                $this->middle_name . ' ' .
+                $this->last_name . ' , ' .
+                'Card Number:' . ' ' .
+                $this->medical_record_number . '  ' .
+                $this->updated_at->diffForHumans()
+
+        );
     }
 }

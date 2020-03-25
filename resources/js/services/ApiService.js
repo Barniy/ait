@@ -11,7 +11,7 @@ let notifier = new AWN(globalOptions);
 
 
 const apiClient = axios.create({
-    baseURL: `http://127.0.0.1:8000/api/`,
+    baseURL: `http://localhost:8000/api/`,
     withCredentials: false, // This is the default
     headers: {
         Accept: 'application/json',

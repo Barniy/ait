@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Patient;
 
 
 
-use Illuminate\Http\Request;
+use App\Queue;
 use App\Address;
 use App\Patient;
+use App\EmergencyContact;
+use App\Models\Department;
+use Illuminate\Http\Request;
+use Spatie\Searchable\Search;
+use App\Models\PatientDepartment;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PatientResource;
-use App\EmergencyContact;
-use App\Http\Resources\ImagingRequestResource;
 use App\Http\Resources\LabRequestResource;
-use App\Models\Department;
-use App\Models\PatientDepartment;
-use App\Queue;
+use App\Http\Resources\ImagingRequestResource;
 use Symfony\Component\HttpFoundation\Response;
 
 class PatientController extends Controller
@@ -29,6 +30,14 @@ class PatientController extends Controller
         return PatientResource::collection(Patient::paginate($perPage));
     }
 
+    public function searchPatient(Request $request)
+    {
+        $results = (new Search())
+            ->registerModel(Patient::class, ['first_name', 'middle_name', 'last_name', 'medical_record_number'])
+            ->registerModel(Address::class, 'mobile_phone_number', 'tel_phone_number')
+            ->search($request->input('query'));
+        return response()->json($results);
+    }
     /**
      * Show the form for creating a new resource.
      * @return Response

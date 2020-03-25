@@ -2,15 +2,7 @@
   <v-container fluid>
     <v-card>
       <v-toolbar>
-        <v-text-field
-          solo-inverted
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-          class="hidden-sm-and-down"
-        />
+        <patientSearch></patientSearch>
         <v-spacer></v-spacer>
         <v-btn @click="onNewPatinet()" class="text-transform-none">
           <v-icon dark left>mdi-plus</v-icon>Patinet
@@ -49,12 +41,13 @@ import { mapState } from "vuex";
 // components
 import Appointement from "../appointment/appointment";
 import patientRegistration from "./patientRegistration";
-
+import patientSearch from "./patientSearch";
 export default {
   name: "Patients",
   components: {
     Appointement,
-    patientRegistration
+    patientRegistration,
+    patientSearch
   },
   data() {
     return {
@@ -99,10 +92,9 @@ export default {
     rowsPerPageItems() {
       return this.pagination.rowsPerPageItems;
     },
-    getPatients(page) {
+    getPatients() {
       ApiService.executeQueryGet("patients?page=" + this.pagination.page)
         .then(response => {
-          console.log(response.data.data);
           this.tableData = response.data.data;
           this.pagination.page = response.data.meta.current_page;
           this.pagination.itemsPerPage = response.data.meta.per_page;
@@ -140,7 +132,7 @@ export default {
   watch: {
     pagination: {
       handler() {
-        this.getPatients(1);
+        this.getPatients();
       },
       deep: true
     }

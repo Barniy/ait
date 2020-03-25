@@ -11,13 +11,17 @@ window.Vue = require('vue');
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
 import moment from 'moment';
+import VueLodash from 'vue-lodash';
+import lodash from 'lodash';
 import '@mdi/font/css/materialdesignicons.css';
 require("vue-awesome-notifications/dist/styles/style.css");
 import 'nprogress/nprogress.css';
+
+
 import store from './store/index';
 
 const vuetifyOptions = {};
-
+Vue.use(VueLodash, { name: 'custom', lodash: lodash });
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 import 'vuetify/dist/vuetify.min.css';
