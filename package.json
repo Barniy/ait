@@ -29,7 +29,7 @@
         "debounce": "^1.2.0",
         "laravel-echo": "^1.6.1",
         "material-design-icons-iconfont": "^5.0.1",
-        "moment": "^2.24.0",
+        "moment": "^2.29.2",
         "nprogress": "^0.2.0",
         "pusher-js": "^5.1.1",
         "vue-alertify": "^1.1.0",
